@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const APIRouter = require('./routes/index')
+
+app.use('/api', APIRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello from App Engine!');
