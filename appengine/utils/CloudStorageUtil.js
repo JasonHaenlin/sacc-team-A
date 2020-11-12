@@ -1,9 +1,9 @@
 require('@google-cloud/storage');
 
-export default class CloudStorageUtil{
+class CloudStorageUtil{
 
-     storage :Storage;
-     bucketName : string;
+     storage;
+     bucketName;
 
     constructor(){
          // Creates a client
@@ -21,10 +21,10 @@ export default class CloudStorageUtil{
        
     }
 
-    async uploadFile(filename : String) : Promise<string>{
+    async uploadFile(filename){
         return new Promise(async (resolve, reject) => {
             const bucket = this.storage.bucket(this.bucketName);
-            let publicUrl : String;
+            let publicUrl;
             // Uploads a local file to the bucket
             await bucket.upload(filename, function(err, file, apiResponse) {
                 resolve(file.publicUrl());
@@ -33,3 +33,5 @@ export default class CloudStorageUtil{
         });
     }
 }
+
+module.exports = CloudStorageUtil;

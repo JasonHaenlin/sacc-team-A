@@ -2,13 +2,13 @@
 const mailer = require('nodemailer');
 const smtp = require('nodemailer-smtp-transport');
 
-export default class SendMailUtil{
+class SendMailUtil{
 
     constructor(){
          
     }
 
-    static async sendMail(from:string,to:string,subject:string,content:string) {
+    static async sendMail(from,to,subject,content) {
     const transport = mailer.createTransport(
         smtp({
         host: 'in.mailjet.com',
@@ -30,3 +30,4 @@ export default class SendMailUtil{
 }
     
 }
+module.exports = SendMailUtil;

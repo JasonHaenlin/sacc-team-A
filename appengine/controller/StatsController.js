@@ -1,10 +1,14 @@
-import CloudStorageUtil from "../utils/CloudStorageUtil";
-import SendMailUtil from "../utils/SendMailUtil";
+var cloudStorageUtil = require("../utils/CloudStorageUtil.js");
+var sendMailUtil = require("../utils/SendMailUtil.js");
 
 var fs = require('fs');
 const MAIL_FROM = 'SACC.TEAMA@cloudcomputing.fr'
 
 class StatsController{
+
+     test(){
+        return 10;
+    }
    
     async getComplexStats(){
         const mail = 'alexis1953@live.fr';
@@ -21,12 +25,12 @@ class StatsController{
         let positionUpdatedNb = 6000;
     }
 
-    calculateComplexStats() : number{
+    calculateComplexStats(){
        let contactWithAPoiLast24hours = 2916;
        return contactWithAPoiLast24hours;
     }
 
-    makeFileFromStats(nb :number,mail:string) : string{
+    makeFileFromStats(nb ,mail) {
         let content = 'Number of person entered in contact with a POI these last 24 hours : '+nb;
         let filename = 'stat-'+mail.split('@')[0]+'.txt';
         fs.writeFile(filename, content, function (err) {
@@ -40,16 +44,16 @@ class StatsController{
      * Create a file in cloud storage from a local file given and return a promise of the file link on cloud storage
      * @param file 
      */
-    storeInCloudStorage(file : string) : Promise<string>{
+    storeInCloudStorage(file ){
         let cloudStorage = new CloudStorageUtil();
-        return cloudStorage.uploadFile(file).then((value : string) =>{
+        return cloudStorage.uploadFile(file).then((value ) =>{
             return value;
         });
     }
 
-    sendMailWithLink(mailAdress : string,link : string){
+    sendMailWithLink(mailAdress ,link ){
         SendMailUtil.sendMail(MAIL_FROM,mailAdress,'Stats link',link);
     }
 }
 
-export default new StatsController;
+module.exports =  new StatsController;
