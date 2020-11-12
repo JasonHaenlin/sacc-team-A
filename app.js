@@ -1,9 +1,25 @@
 const express = require('express');
+const bodyParser = require('body-parser')
 const app = express();
-const APIRouter = require('./routes/index')
-const StatsRouter = require('./routes/statistics/index')
+const APIRouter = require('./routes');
+const UserRouter = require('./routes/user');
+const StatsRouter = require('./routes/statistics')
+const { logTheInfo, logTheError } = require('./middlewares/config/logger');
+const { handle404Error, handleDevErrors, handleClientErrors, logErrors } = require('./middlewares/error-handlers');
+const { logTheTransaction } = require('./middlewares/config/logger');
 
-app.use('/api', APIRouter)
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+
+// log everything that pass to the router
+app.use((req, res, next) => {
+  logTheTransaction(req.ip, `${req.originalUrl} - ${req.method}`);
+  next();
+});
+
+app.use('/api', APIRouter);
+app.use('/user', UserRouter);
 app.use('/stats', StatsRouter)
 
 app.get('/', (req, res) => {
@@ -13,5 +29,19 @@ app.get('/', (req, res) => {
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}...`);
+  logTheInfo(`Server listening on port ${PORT}...`);
+});
+
+// catch 404 and forward to error handler
+// triggered when a non-existent route attempts to be accessed
+app.use(handle404Error);
+// log the errors
+app.use(logErrors);
+// client error handler
+app.use(handleClientErrors);
+// dev error handler
+app.use(handleDevErrors);
+
+process.on('unhandledRejection', (reason, promise) => {
+  logTheError('Unhandled Rejection at : ' + reason);
 });
