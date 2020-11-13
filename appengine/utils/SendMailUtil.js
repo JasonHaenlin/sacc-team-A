@@ -1,33 +1,51 @@
+const sendgrid = require('@sendgrid/mail');
 
-const mailer = require('nodemailer');
-const smtp = require('nodemailer-smtp-transport');
-
-class SendMailUtil{
-
-    constructor(){
-         
-    }
-
-    static async sendMail(from,to,subject,content) {
-    const transport = mailer.createTransport(
-        smtp({
-        host: 'in.mailjet.com',
-        port: 2525,
-        auth: {
-            user: process.env.MAILJET_API_KEY || '<your-mailjet-api-key',
-            pass: process.env.MAILJET_API_SECRET || '<your-mailjet-api-secret>',
-        },
-        })
+/**
+ * Responds to an HTTP request from Cloud Tasks and sends an email using data
+ * from the request body.
+ *
+ * @param {object} req Cloud Function request context.
+ * @param {object} req.body The request payload.
+ * @param {string} req.body.to_email Email address of the recipient.
+ * @param {string} req.body.to_name Name of the recipient.
+ * @param {string} req.body.from_name Name of the sender.
+ * @param {object} res Cloud Function response context.
+ */
+exports.sendEmail = async ( to_email,subject,content) =>{
+  // Get the SendGrid API key from the environment variable.
+  const key = process.env.SENDGRID_API_KEY;
+  if (!key) {
+    const error = new Error(
+      'SENDGRID_API_KEY was not provided as environment variable.'
     );
+    error.code = 401;
+    throw error;
+  }
+  sendgrid.setApiKey(key);
 
-    const json = await transport.sendMail({
-        from: from, // From address
-        to: to, // To address
-        subject: subject, // Subject
-        text: content, // Content
+  if (!to_email) {
+    const error = new Error('Email address not provided.');
+    error.code = 400;
+    throw error;
+  }
+
+  // Construct the email request.
+  const msg = {
+    to: to_email,
+    from: 'alexislefebvre35@gmail.com',
+    subject: subject,
+    html: content,
+  };
+
+  try {
+    sendgrid.send(msg).then((res)=>{
+        console.log(res);
+    }).catch((error)=>{
+        console.log(error);
     });
-    console.log(json);
-}
-    
-}
-module.exports = SendMailUtil;
+    // Send OK to Cloud Task queue to delete task.
+  } catch (error) {
+      console.log(error);
+    // Any status code other than 2xx or 503 will trigger the task to retry.  
+  }
+};
