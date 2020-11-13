@@ -1,37 +1,47 @@
 const { handleExceptions } = require('../../middlewares/error-handlers');
 const { ValidationError, NotFoundError } = require('../../middlewares/errors');
 const { ensureIsAdmin } = require("../../middlewares/authorization");
+const { addUser } = require("../../middlewares/tasks");
 const validateUser = require("../../middlewares/models/user");
 const express = require('express');
+const bodyParser = require('body-parser')
 const router = express.Router();
 const userSQL = require('../../database/models/user')
 
-// testing purpose for now
-const users = [];
+const users = []
 
-router.get('/', handleExceptions(async (req, res) => {
-    userSQL.getUser().then(users => {
-        res.status(200).json(users);
-    }).catch(err => {
-        res.status(400).send(err)
-    })
-    // res.status(200).json(users);
+/**
+ * Get all the users
+ * @param {string} req.body.sha1 identify a user (should be a length of 10 using a-zA-Z0-9)
+ * @param {string} req.body.email email of a suer (eg : contact@teamsacca.com)
+ * @param {number} req.body.user_status_change_date date as a timestamp or none if not set
+ */
+router.get("/", bodyParser.json(), handleExceptions(async (req, res) => {
+    const users = await userSQL.getUser();
+    res.status(200).json(users);
 }));
 
-router.post('/', handleExceptions(async (req, res) => {
+/**
+ * Post a new user
+ * @param {string} req.body.sha1 identify a user (should be a length of 10 using a-zA-Z0-9)
+ * @param {string} req.body.email email of a suer (eg : contact@teamsacca.com)
+ * @param {number} req.body.user_status_change_date date as a timestamp or none if not set (OPTIONAL)
+ */
+router.post('/', bodyParser.json(), handleExceptions(async (req, res) => {
     const user = req.body;
     const { error } = validateUser(user);
     if (error) {
         throw new ValidationError(`User does not match schema ${user}`, error);
     }
-    // users.push(user);
-    userSQL.createUser(user).then(resUser => {
-        res.status(201).json(resUser);
-    }).catch(err => {
-        res.status(400).send(err)
-    })
+    addUser.createTask(user);
+    res.status(200).json("Task Sent");
 }));
 
+/**
+ * Update the POI of a user
+ * @param {string} header.authorization should be the mail of an admin
+ * @param {params} req.params.user_status_change_date date as a timestamp or none if not set
+ */
 router.put('/:sha1', ensureIsAdmin, handleExceptions(async (req, res) => {
     const sha1 = req.params.sha1
     const user = await userSQL.getUserSha1(sha1);
@@ -39,20 +49,26 @@ router.put('/:sha1', ensureIsAdmin, handleExceptions(async (req, res) => {
         throw new NotFoundError(`User not found with sha1 ${sha1}`);
     }
     user.user_status_change_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    userSQL.putUser(sha1, user).then(resUser => {
-        res.status(201).json(resUser);
-    }).catch(err => {
-        res.status(400).send(err)
-    })
+    const model = await userSQL.putUser(sha1, user);
+    res.status(201).json(model);
 }));
 
+/**
+ * Delete all Users
+ */
 router.delete('/', handleExceptions(async (req, res) => {
-    // users.push(user);
-    userSQL.deleteAll().then(() => {
-        res.status(200).json('success');
-    }).catch(err => {
-        res.status(400).send(err)
-    })
+    await userSQL.deleteAll();
+    res.status(200).json('Deleted');
+}));
+
+/**
+ * Task to post a new user
+ */
+router.post('/task', bodyParser.json(), handleExceptions(async (req, res) => {
+    // Log the request payload
+    console.log('Received task with payload: %s', req.body);
+    userSQL.createUser(req.body);
+    res.status(201).send(`Printed task payload: ${req.body}`).end();
 }));
 
 module.exports = router;
