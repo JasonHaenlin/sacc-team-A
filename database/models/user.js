@@ -97,4 +97,4 @@ const deleteAll = async () => {
     })
 }
 
-module.exports = {createUser, getUser, getUserSha1, putUser, deleteAll}
+module.exports = {getNumberOfUsers, getNumberOfPoi, createUser, getUser, getUserSha1, putUser, deleteAll}
