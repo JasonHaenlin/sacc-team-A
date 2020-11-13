@@ -4,3 +4,4 @@ log
 cloud_sql_proxy
 *.http
 .env
+**/.DS_Store
