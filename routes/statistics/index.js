@@ -3,22 +3,18 @@ const express = require("express");
 const router = express.Router();
 var statsController = require("../../appengine/controller/StatsController.js");
 
-router.get('/',(req,res)=>{
-    console.log("ok");
-    res.json(statsController.getComplexStats("alexis1953@live.fr"));
-});
-
 router.get(
-  "/numberOfUsers",
-  handleExceptions(async (res) => {
-    res.status(200).json(statsController.getNumberOfUsers());
-  })
-);
-
-router.get(
-  "/numberOfPoi",
-  handleExceptions(async (res) => {
-    res.status(200).json(statsController.getNumberOfPoi());
+  "/",
+  handleExceptions(async (req, res) => {
+    let valueToReturn;
+    if (req.query["numberofusers"] !== undefined) {
+      valueToReturn = await statsController.getNumberOfUsers();
+    } else if (req.query["numberofpoi"] !== undefined) {
+      valueToReturn = await statsController.getNumberOfPoi();
+    } else {
+      valueToReturn = statsController.test();
+    }
+    res.status(200).json(valueToReturn);
   })
 );
 

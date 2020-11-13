@@ -15,15 +15,27 @@ const createUser = async (user) => {
     return new Promise((resolve, reject) => {
         const sql = "INSERT INTO users (sha1, email, user_status_change_date) VALUES ($1, $2, $3);";
         const statement = Object.values(user);
-        if(statement.length == 2) statement.push(null)
+        if (statement.length == 2) statement.push(null)
         pool.query(sql, statement, (err, result) => {
             if (err) {
                 reject(err.message);
             }
             resolve(user)
         });
-    })
-}
+    });
+};
+
+const getNumberOfUsers = async () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT COUNT(*) FROM users;";
+        pool.query(sql, [], (err, result) => {
+            if (err) {
+                reject(err.message);
+            }
+            resolve(result.rows[0].count);
+        });
+    });
+};
 
 const getUser = async () => {
     return new Promise((resolve, reject) => {
@@ -32,10 +44,22 @@ const getUser = async () => {
             if (err) {
                 reject(err.message);
             }
-            resolve(result.rows)
+            resolve(result.rows);
         });
-    })
-}
+    });
+};
+
+const getNumberOfPoi = async () => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT COUNT(*) FROM users WHERE user_status_change_date IS NOT NULL;";
+        pool.query(sql, [], (err, result) => {
+            if (err) {
+                reject(err.message);
+            }
+            resolve(result.rows[0].count)
+        });
+    });
+};
 
 const getUserSha1 = async (sha1) => {
     return new Promise((resolve, reject) => {
@@ -61,4 +85,4 @@ const putUser = async (sha1, user) => {
     })
 }
 
-module.exports = {createUser, getUser, getUserSha1, putUser}
+module.exports = { createUser, getNumberOfUsers, getUser, getNumberOfPoi, getUserSha1, putUser }
