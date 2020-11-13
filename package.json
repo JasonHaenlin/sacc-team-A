@@ -7,6 +7,8 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "deploy": "gcloud app deploy",
+    "emulator": "gcloud beta emulators datastore start",
+    "sql": "./cloud_sql_proxy -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
     "lint": "./node_modules/.bin/eslint -c .eslintrc.js app/",
     "lint:fix": "./node_modules/.bin/eslint -c .eslintrc.js app/ --fix"
   },
@@ -22,13 +24,16 @@
   },
   "homepage": "https://github.com/AlexandreLon/sacc-team-A#readme",
   "dependencies": {
+    "@google-cloud/datastore": "^6.2.0",
     "@google-cloud/storage": "^5.4.0",
     "dotenv": "^8.2.0",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "joi": "^17.3.0",
     "nodemailer": "^6.4.15",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.6",
+    "pg": "^8.5.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {}

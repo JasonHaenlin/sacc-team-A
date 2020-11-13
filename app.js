@@ -3,8 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const APIRouter = require('./routes');
-const UserRouter = require('./routes/user');
-const StatsRouter = require('./routes/statistics')
 const { logTheInfo, logTheError } = require('./middlewares/config/logger');
 const { handle404Error, handleDevErrors, handleClientErrors, logErrors } = require('./middlewares/error-handlers');
 const { logTheTransaction } = require('./middlewares/config/logger');
@@ -20,8 +18,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api', APIRouter);
-app.use('/user', UserRouter);
-app.use('/stats', StatsRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello from App Engine!');

@@ -4,7 +4,7 @@ const Joi = require('joi');
 const schema = Joi.object({
     sha1: Joi.string().pattern(/^([A-Za-z0-9]{10})+$/).required(),
     email: Joi.string().email({ minDomainSegments: 2 }).required(),
-    userStatusChangeDate: Joi.date().timestamp(),
+    user_status_changeDate: Joi.date().timestamp(),
 });
 
 // return { error, value }
