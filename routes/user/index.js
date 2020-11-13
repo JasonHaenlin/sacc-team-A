@@ -18,16 +18,6 @@ router.get('/', handleExceptions(async (req, res) => {
     // res.status(200).json(users);
 }));
 
-router.get('/storage', handleExceptions(async (req, res) => {
-    res.status(200).json({
-        user: process.env.PGSQL_USER,
-        host: process.env.PGSQL_HOST,
-        database: process.env.PGSQL_DATABASE,
-        password: process.env.PGSQL_PASSWORD,
-        port: process.env.PGSQL_PORT
-    })
-}));
-
 router.post('/', handleExceptions(async (req, res) => {
     const user = req.body;
     const { error } = validateUser(user);
