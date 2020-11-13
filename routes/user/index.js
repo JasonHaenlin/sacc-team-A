@@ -46,4 +46,13 @@ router.put('/:sha1', ensureIsAdmin, handleExceptions(async (req, res) => {
     })
 }));
 
+router.delete('/', handleExceptions(async (req, res) => {
+    // users.push(user);
+    userSQL.deleteAll().then(() => {
+        res.status(200).json('success');
+    }).catch(err => {
+        res.status(400).send(err)
+    })
+}));
+
 module.exports = router;

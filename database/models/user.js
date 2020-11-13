@@ -85,4 +85,16 @@ const putUser = async (sha1, user) => {
     })
 }
 
-module.exports = { createUser, getNumberOfUsers, getUser, getNumberOfPoi, getUserSha1, putUser }
+const deleteAll = async () => {
+    return new Promise((resolve, reject) => {
+        const sql = "TRUNCATE TABLE users;";
+        pool.query(sql, [], (err, result) => {
+            if (err) {
+                reject(err.message);
+            }
+            resolve()
+        });
+    })
+}
+
+module.exports = {createUser, getUser, getUserSha1, putUser, deleteAll}
