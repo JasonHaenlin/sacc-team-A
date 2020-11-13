@@ -13,8 +13,8 @@ const {
 } = require("./middlewares/error-handlers");
 const { logTheTransaction } = require("./middlewares/config/logger");
 
+app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // log everything that pass to the router
 app.use((req, res, next) => {

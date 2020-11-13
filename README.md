@@ -2,7 +2,13 @@
 
 Welcome to Sacc Team A Project
 
-## To install 
+## Project
+
+project id  : sacc-team-A
+region      : europe-west
+cloud task  : europe-west1
+
+## To install
 
 ```npm install```
 
@@ -18,7 +24,7 @@ Welcome to Sacc Team A Project
 
 ## Emulator datastore
 
-### Prepare 
+### Prepare
 
 ```
 export DATASTORE_EMULATOR_HOST=localhost:8081
@@ -43,3 +49,8 @@ npm run emulator
 ```
 npm run sql
 ```
+## Create task
+
+gcloud tasks queues create default
+gcloud tasks queues describe default
+gcloud tasks locations list
