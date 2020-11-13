@@ -34,4 +34,12 @@ npm run emulator
 
 ## Emulator SQL
 
-[https://cloud.google.com/sql/docs/mysql/quickstart-proxy-test#macos-64-bit](https://cloud.google.com/sql/docs/mysql/quickstart-proxy-test#macos-64-bit)
+## Download
+
+[https://cloud.google.com/sql/docs/mysql/quickstart-proxy-test](https://cloud.google.com/sql/docs/mysql/quickstart-proxy-test)
+
+### Run emulator
+
+```
+npm run sql
+```
