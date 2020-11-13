@@ -2,29 +2,32 @@ const { CloudTasksClient } = require('@google-cloud/tasks');
 const { logTheTransaction } = require('../config/logger');
 
 const { QUEUE_ID, PROJECT_ID, QUEUE_LOCATION } = process.env;
+const client = new CloudTasksClient();
 
 module.exports = class BaseTask {
     constructor(httpMethod, relativeUri) {
-        this.client = new CloudTasksClient();
-        this.parent = this.client.queuePath(PROJECT_ID, QUEUE_LOCATION, QUEUE_ID);
-        this.task = {
-            appEngineHttpRequest: {
-                httpMethod: httpMethod,
-                relativeUri: relativeUri,
-            },
-        };
+        this.httpMethod = httpMethod;
+        this.relativeUri = relativeUri;
     }
 
     async createTask(payload) {
-        if (payload) {
-            task.appEngineHttpRequest.body = Buffer.from(payload).toString('base64');
-        }
+        const parent = client.queuePath(PROJECT_ID, QUEUE_LOCATION, QUEUE_ID);
+        const task = {
+            appEngineHttpRequest: {
+                httpMethod: this.httpMethod,
+                relativeUri: this.relativeUri,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        };
         logTheTransaction(`Sending task: ${this.httpMethod} ${this.relativeUri}`, payload);
-        const parent = this.parent;
-        const task = this.task;
+        if (payload) {
+            task.appEngineHttpRequest.body = Buffer.from(JSON.stringify(payload)).toString('base64');
+        }
         const request = { parent, task };
         const [response] = await client.createTask(request);
-        logTheTransaction(`Created task ${response.name}`);
+        logTheTransaction(`Created task:`, `${response.name}`);
     }
 
 }
