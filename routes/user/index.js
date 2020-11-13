@@ -8,15 +8,13 @@ const bodyParser = require('body-parser')
 const router = express.Router();
 const userSQL = require('../../database/models/user')
 
-const users = []
-
 /**
  * Get all the users
  * @param {string} req.body.sha1 identify a user (should be a length of 10 using a-zA-Z0-9)
  * @param {string} req.body.email email of a suer (eg : contact@teamsacca.com)
  * @param {number} req.body.user_status_change_date date as a timestamp or none if not set
  */
-router.get("/", bodyParser.json(), handleExceptions(async (req, res) => {
+router.get("/", handleExceptions(async (req, res) => {
     const users = await userSQL.getUser();
     res.status(200).json(users);
 }));
@@ -27,7 +25,7 @@ router.get("/", bodyParser.json(), handleExceptions(async (req, res) => {
  * @param {string} req.body.email email of a suer (eg : contact@teamsacca.com)
  * @param {number} req.body.user_status_change_date date as a timestamp or none if not set (OPTIONAL)
  */
-router.post('/', bodyParser.json(), handleExceptions(async (req, res) => {
+router.post('/', handleExceptions(async (req, res) => {
     const user = req.body;
     const { error } = validateUser(user);
     if (error) {
@@ -64,10 +62,10 @@ router.delete('/', handleExceptions(async (req, res) => {
 /**
  * Task to post a new user
  */
-router.post('/task', bodyParser.json(), handleExceptions(async (req, res) => {
+router.post('/task', handleExceptions(async (req, res) => {
     // Log the request payload
     console.log('Received task with payload: %s', req.body);
-    userSQL.createUser(req.body);
+    await userSQL.createUser(req.body);
     res.status(201).send(`Printed task payload: ${req.body}`).end();
 }));
 
