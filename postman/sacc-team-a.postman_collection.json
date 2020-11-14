@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "1d4df75d-09c6-4e38-b2d4-0a9ccd46688f",
+		"name": "sacc-team-a",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "requests",
+			"item": [
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "GET users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user"
+									]
+								},
+								"description": "Get all the users"
+							},
+							"response": []
+						},
+						{
+							"name": "POST user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"sha1\":\"0123456789\",\r\n    \"email\":\"team-a@sacc.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user"
+									]
+								},
+								"description": "Add a new user by sending a new task"
+							},
+							"response": []
+						},
+						{
+							"name": "PUT user",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "admin@tochange.fr",
+										"description": "email of an existing admin in the system",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/user/:sha1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										":sha1"
+									],
+									"variable": [
+										{
+											"key": "sha1",
+											"value": "0123456789",
+											"description": "sha1 of an existing user in the system"
+										}
+									]
+								},
+								"description": "Update the user POI at the current date of the request\r\nAn header authorization must be set corresponding to the valid email of an admin"
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE users",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user"
+									]
+								},
+								"description": "Get all the users"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "admin",
+					"item": [
+						{
+							"name": "POST admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"teama@sacc.fr\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/admin",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin"
+									]
+								},
+								"description": "Add a new admin with an email"
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE admins",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/admin",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin"
+									]
+								},
+								"description": "retrieve all the admins with there email (testing purpose)"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "meeting",
+					"item": [
+						{
+							"name": "GET meetings",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/meeting",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"meeting"
+									]
+								},
+								"description": "Retrieve all the meetings"
+							},
+							"response": []
+						},
+						{
+							"name": "POST meeting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"u1sha1\":\"0123456789\",\r\n    \"u2sha1\":\"1234567890\",\r\n    \"latitude\":43.623795,\r\n    \"longitude\":7.049625\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/meeting",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"meeting"
+									]
+								},
+								"description": "Add a new meeting point between two people"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "stats",
+					"item": [
+						{
+							"name": "GET stats",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/stat?numberofusers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"stat"
+									],
+									"query": [
+										{
+											"key": "numberofusers",
+											"value": null
+										},
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "910d8d9b-dba5-4831-850e-de2d2b7f7dbf",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d96b34ee-b0fb-4b66-83e8-6a87011aff31",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "scenario",
+			"item": [
+				{
+					"name": "HEALTHCHECK",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c36301e6-268a-48c4-b531-73517ade8d07",
+								"exec": [
+									"pm.environment.set(\"userCount\", 5);\r",
+									"pm.environment.set(\"adminCount\", 2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}",
+							"host": [
+								"{{base_url}}"
+							]
+						},
+						"description": "Get all the users"
+					},
+					"response": []
+				},
+				{
+					"name": "POST user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "796d68f2-abb9-4af6-aeec-b3d08d4ceafe",
+								"exec": [
+									"function generateId() {\r",
+									"   return  [...Array(10)].map(i=>(~~(Math.random()*36)).toString(36)).join('');\r",
+									"}\r",
+									"pm.environment.set(\"sha1\", generateId());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbaae93a-3117-4f8c-8f27-90ef7f78b0fa",
+								"exec": [
+									"let currentCount = pm.environment.get(\"userCount\");\r",
+									"\r",
+									"if (currentCount > 1){\r",
+									"    currentCount = currentCount -1 ;\r",
+									"    pm.environment.set(\"userCount\", currentCount);\r",
+									"    postman.setNextRequest(\"POST user\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sha1\":\"{{sha1}}\",\r\n    \"email\":\"team-a@dummy.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "Add a new user by sending a new task"
+					},
+					"response": []
+				},
+				{
+					"name": "POST admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b60630b5-d519-48e0-80f2-72d7d36deab3",
+								"exec": [
+									"let currentCount = pm.environment.get(\"adminCount\");\r",
+									"\r",
+									"if (currentCount > 1){\r",
+									"    currentCount = currentCount -1 ;\r",
+									"    pm.environment.set(\"adminCount\", currentCount);\r",
+									"    postman.setNextRequest(\"POST admin\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"jh.notif+{{adminCount}}@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin"
+							]
+						},
+						"description": "Add a new admin with an email"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f482786b-5118-4cbe-8fa2-216afd5cd3a9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2b7480f2-dc6f-4a42-8188-c53b0aeed4e7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
