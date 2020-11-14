@@ -7,9 +7,8 @@ const router = express.Router();
 const datastore = require('../../database/datastore')
 
 router.get('/', handleExceptions(async (req, res) => {
-    datastore.get("meeting").then(meetings => {
-        res.status(200).json(meetings);
-    })
+    const meetings = await datastore.get("meeting");
+    res.status(200).json(meetings);
 }));
 
 router.post('/', handleExceptions(async (req, res) => {
@@ -19,9 +18,8 @@ router.post('/', handleExceptions(async (req, res) => {
         throw new ValidationError(`Meeting does not match schema ${meeting}`, error);
     }
     meeting.timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    datastore.save("meeting", meeting).then(meeting => {
-        res.status(201).json(meeting.data);
-    })
+    const meeting = await datastore.save("meeting", meeting);
+    res.status(201).json(meeting.data);
 }));
 
 module.exports = router;
