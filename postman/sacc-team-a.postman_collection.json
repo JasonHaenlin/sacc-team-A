@@ -373,8 +373,8 @@
 							"script": {
 								"id": "c36301e6-268a-48c4-b531-73517ade8d07",
 								"exec": [
-									"pm.environment.set(\"userCount\", 5);\r",
-									"pm.environment.set(\"adminCount\", 2);"
+									"pm.environment.set(\"userCount\", 100);\r",
+									"pm.environment.set(\"adminCount\", 10);"
 								],
 								"type": "text/javascript"
 							}

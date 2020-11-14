@@ -88,7 +88,7 @@ The scall factor depends on the class instance of the app.
 
 default is `F1` for our app
 
-`target_cpu_utilization` : treshold of the processor when a new instance should start
+`target_cpu_utilization` : treshold of the processor when a new instance should start [0,5 and 0,95, default 0.6]
 
 `min_instances` : minimum number of instance to start
 
@@ -98,4 +98,4 @@ default is `F1` for our app
 
 `max_pending_latency` : the maximum of time a request can wait if the queue if full depending on the max concurrent requests.
 
-`max_concurrent_requests` : maximum number of request on an instance before a new one need to start
+`max_concurrent_requests` : maximum number of request on an instance before a new one need to start [max 80, default 10]

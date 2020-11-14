@@ -12,7 +12,8 @@
     "deploy": "gcloud app deploy",
     "datastore": "gcloud beta emulators datastore start",
     "sql": "./cloud_sql_proxy -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
-    "wsql": "./cloud_sql_proxy.exe -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432"
+    "wsql": "./cloud_sql_proxy.exe -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
+    "paraman": "node postman/paraman.js"
   },
   "repository": {
     "type": "git",
@@ -39,5 +40,9 @@
     "uuid": "^8.3.1",
     "winston": "^3.3.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "async": "^3.2.0",
+    "newman": "^5.2.1",
+    "path": "^0.12.7"
+  }
 }
