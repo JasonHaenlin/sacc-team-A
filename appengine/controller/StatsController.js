@@ -24,6 +24,7 @@ class StatsController {
         return await userSQL.getNumberOfPoi(); // get poi from DB
     }
 
+
     calculateSimpleStats() {
         let registeredUsers = 14000;
         let poi = 2000;
@@ -31,8 +32,35 @@ class StatsController {
     }
 
     calculateComplexStats() {
-        let contactWithAPoiLast24hours = 2916;
-        return contactWithAPoiLast24hours;
+
+        // Yesterday
+        let date = new Date();
+        date.setDate(date.getDate() - 1);
+
+        var contactsWithPOILast24hours = []
+
+        // First get all users POI
+        
+        // Foreach  POI
+        array.forEach(poi => {
+            result = datastore.createQuery('Meeting')
+            .filter('firstUserSHA1', '=', poi)
+            .filter('secondUserSHA1', '=', poi)
+            .filter('timestamp', '>=',date);
+
+            // result contain all persons in contact with a poi (excluding the poi)
+            result.forEach(contact =>{
+                contactsWithPOILast24hours.push(contact)
+            })
+
+        });
+
+        let countContactsWithPOILast24hours = contactsWithPOILast24hours.length;
+        let json = {
+            count : countContactsWithPOILast24hours,
+            mails : contactsWithPOILast24hours
+        }
+        return json;
     }
 
     makeFileFromStats(nb, id) {
