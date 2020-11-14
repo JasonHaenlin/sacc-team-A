@@ -22,7 +22,7 @@ router.post('/', handleExceptions(async (req, res) => {
 /**
  * Get admins (testing purpose)
  * @param {object} req.body list of admin
- * @param {string} req.body.email email of a suer (eg : contact@teamsacca.com)
+ * @param {string} req.body.email email of a user (eg : contact@teamsacca.com)
  */
 router.get('/', handleExceptions(async (req, res) => {
     const admins = await adminSQL.getAdmins();

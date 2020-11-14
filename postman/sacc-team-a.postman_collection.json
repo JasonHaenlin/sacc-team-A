@@ -142,9 +142,9 @@
 							"response": []
 						},
 						{
-							"name": "DELETE admins",
+							"name": "GET admins",
 							"request": {
-								"method": "DELETE",
+								"method": "GET",
 								"header": [],
 								"url": {
 									"raw": "{{base_url}}/admin",
@@ -250,6 +250,92 @@
 					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "table",
+					"item": [
+						{
+							"name": "CREATE tables",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/table/create",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"table",
+										"create"
+									],
+									"query": [
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE tables",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/table/delete",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"table",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						},
+						{
+							"name": "CLEAR tables",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/table/clear",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"table",
+										"clear"
+									],
+									"query": [
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						}
+					],
+					"description": "Request to manage database ",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"event": [
@@ -304,6 +390,58 @@
 							]
 						},
 						"description": "Get all the users"
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE tables",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/table/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"table",
+								"create"
+							],
+							"query": [
+								{
+									"key": "numberofpoi",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+					},
+					"response": []
+				},
+				{
+					"name": "CLEAR tables",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/table/clear",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"table",
+								"clear"
+							],
+							"query": [
+								{
+									"key": "numberofpoi",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
 					},
 					"response": []
 				},

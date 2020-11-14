@@ -2,7 +2,6 @@ const pool = require('../pgsql');
 
 module.exports = {
     createAdmin: async (admin) => {
-        await createAdminTableIfNotExist();
         const sql = "INSERT INTO admin (email) VALUES ($1);";
         const queryRes = await pool.query(sql, Object.values(admin));
         return queryRes.rows;
@@ -19,11 +18,4 @@ module.exports = {
         const queryRes = await pool.query(sql, [email]);
         return queryRes.rows[0];
     }
-}
-
-createAdminTableIfNotExist = async () => {
-    await pool.query(`CREATE TABLE IF NOT EXISTS admin (
-                id SERIAL PRIMARY KEY,
-                email VARCHAR(100) NOT NULL
-            );`);
 }

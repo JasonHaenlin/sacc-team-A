@@ -1,17 +1,6 @@
 const pool = require('../pgsql')
 
 const createUser = async (user) => {
-    // await new Promise((resolve, reject) => {
-    //     pool.query(`DROP TABLE users;`, [], () => resolve())
-    // })
-    await new Promise((resolve, reject) => {
-        pool.query(`CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            sha1 VARCHAR(100) NOT NULL,
-            email VARCHAR(100) NOT NULL,
-            user_status_change_date DATE
-        );`, [], () => resolve())
-    })
     return new Promise((resolve, reject) => {
         const sql = "INSERT INTO users (sha1, email, user_status_change_date) VALUES ($1, $2, $3);";
         const statement = Object.values(user);
@@ -97,4 +86,4 @@ const deleteAll = async () => {
     })
 }
 
-module.exports = {getNumberOfUsers, getNumberOfPoi, createUser, getUser, getUserSha1, putUser, deleteAll}
+module.exports = { getNumberOfUsers, getNumberOfPoi, createUser, getUser, getUserSha1, putUser, deleteAll }
