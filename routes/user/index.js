@@ -65,7 +65,7 @@ router.delete('/', handleExceptions(async (req, res) => {
 router.post('/task', handleExceptions(async (req, res) => {
     logTheInfo('Received task with payload: %s', req.body);
     await userSQL.createUser(req.body);
-    res.status(201).send(`Printed task payload: ${req.body}`).end();
+    res.status(201).send(`Printed task payload: ${req.body}`);
 }));
 
 module.exports = router;

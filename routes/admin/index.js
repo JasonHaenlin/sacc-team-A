@@ -1,5 +1,6 @@
 const { handleExceptions } = require('../../middlewares/error-handlers');
 const validateAdmin = require("../../middlewares/models/admin");
+const { addAdmin } = require('../../middlewares/tasks');
 const express = require('express');
 const router = express.Router();
 const adminSQL = require('../../database/models/admin');
@@ -14,8 +15,7 @@ router.post('/', handleExceptions(async (req, res) => {
     if (error) {
         throw new ValidationError(`Admin does not match schema ${admin}`, error);
     }
-    // TODO : task to add admin here
-    await adminSQL.createAdmin(admin);
+    addAdmin.createTask(admin);
     res.status(200).json("Task Sent");
 }));
 
@@ -28,5 +28,15 @@ router.get('/', handleExceptions(async (req, res) => {
     const admins = await adminSQL.getAdmins();
     res.status(200).json(admins);
 }));
+
+/**
+ * Task to post a new admin
+ */
+router.post('/task', handleExceptions(async (req, res) => {
+    logTheInfo('Received task with payload: %s', req.body);
+    await adminSQL.createAdmin(req.body);
+    res.status(201).send(`Printed task payload: ${req.body}`);
+}));
+
 
 module.exports = router;
