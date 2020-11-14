@@ -26,16 +26,29 @@ cloud task  : europe-west1
 
 ### Prepare
 
+#### Shell
 ```
 export DATASTORE_EMULATOR_HOST=localhost:8081
 export DATASTORE_PROJECT_ID=sacc-team-a
 export DATASTORE_USE_PROJECT_ID_AS_APP_ID=true
 ```
 
+#### Powershell
+```powershell
+# to set
+$Env:DATASTORE_EMULATOR_HOST = 8081
+$Env:DATASTORE_PROJECT_ID = "sacc-team-a"
+$Env:DATASTORE_USE_PROJECT_ID_AS_APP_ID = "true"
+# to get (test)
+$Env:DATASTORE_EMULATOR_HOST
+$Env:DATASTORE_PROJECT_ID
+$Env:DATASTORE_USE_PROJECT_ID_AS_APP_ID
+```
+
 ### Run emulator
 
 ```
-npm run emulator
+npm run datastore
 ```
 
 ## Emulator SQL

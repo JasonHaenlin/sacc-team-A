@@ -10,10 +10,9 @@
     "start": "NODE_ENV=prod node app.js",
     "dev": "NODE_ENV=dev nodemon app.js",
     "deploy": "gcloud app deploy",
-    "emulator": "gcloud beta emulators datastore start",
+    "datastore": "gcloud beta emulators datastore start",
     "sql": "./cloud_sql_proxy -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
-    "lint": "./node_modules/.bin/eslint -c .eslintrc.js app/",
-    "lint:fix": "./node_modules/.bin/eslint -c .eslintrc.js app/ --fix"
+    "wsql": "./cloud_sql_proxy.exe -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432"
   },
   "repository": {
     "type": "git",

@@ -40,7 +40,7 @@ router.post('/', handleExceptions(async (req, res) => {
  * @param {string} header.authorization should be the mail of an admin
  * @param {params} req.params.user_status_change_date date as a timestamp or none if not set
  */
-router.put('/:sha1', ensureIsAdmin, handleExceptions(async (req, res) => {
+router.put('/:sha1', handleExceptions(ensureIsAdmin), handleExceptions(async (req, res) => {
     const sha1 = req.params.sha1
     const user = await userSQL.getUserSha1(sha1);
     if (!user) {
