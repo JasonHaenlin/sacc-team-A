@@ -1,11 +1,21 @@
 # [START cloud_tasks_app_yaml]
 runtime: nodejs12
 
-# [START cloud_tasks_app_env_vars]
+## [START cloud_tasks_app_env_vars]
 env_variables:
   PROJECT_ID: "sacc-team-a"
   QUEUE_ID: "default"
   QUEUE_LOCATION: "europe-west1"
-# [END cloud_tasks_app_env_vars]
+## [END cloud_tasks_app_env_vars]
+
+## [START scaling_app_env_vars]
+automatic_scaling:
+  target_cpu_utilization: 0.60
+  min_instances: 1
+  max_instances: 5
+  min_pending_latency: 30ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 10
+## [END scaling_app_env_vars]
 
 # [END cloud_tasks_app_yaml]
