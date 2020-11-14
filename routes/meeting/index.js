@@ -25,10 +25,9 @@ router.post('/', handleExceptions(async (req, res) => {
  * Task to post a new meeting
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    const meeting = req.body;
-    logTheInfo('Received task with payload: %s', meeting);
-    meeting.timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    const meeting = await datastore.save("meeting", meeting);
+    logTheInfo('Received task with payload: %s', req.body);
+    req.body.timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const meeting = await datastore.save("meeting", req.body);
     res.status(201).send(`Printed task payload: ${meeting}`).end();
 
 }));
