@@ -2,9 +2,9 @@ const { handleExceptions } = require('../../middlewares/error-handlers');
 const { ValidationError, NotFoundError } = require('../../middlewares/errors');
 const { ensureIsAdmin } = require("../../middlewares/authorization");
 const { addUser } = require("../../middlewares/tasks");
+const { logTheInfo } = require('../../middlewares/config/logger');
 const validateUser = require("../../middlewares/models/user");
 const express = require('express');
-const bodyParser = require('body-parser')
 const router = express.Router();
 const userSQL = require('../../database/models/user')
 
@@ -63,8 +63,7 @@ router.delete('/', handleExceptions(async (req, res) => {
  * Task to post a new user
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    // Log the request payload
-    console.log('Received task with payload: %s', req.body);
+    logTheInfo('Received task with payload: %s', req.body);
     await userSQL.createUser(req.body);
     res.status(201).send(`Printed task payload: ${req.body}`).end();
 }));
