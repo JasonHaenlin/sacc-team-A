@@ -4,6 +4,7 @@ const { addAdmin } = require('../../middlewares/tasks');
 const express = require('express');
 const router = express.Router();
 const adminSQL = require('../../database/models/admin');
+const { logTheInfo } = require('../../middlewares/config/logger');
 
 /**
  * Post a new admin
