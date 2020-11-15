@@ -37,6 +37,15 @@ function get(kind) {
     })
 }
 
+function removeAll(kind) {
+    return new Promise(async (resolve, reject) => {
+        const query = datastore.createQuery(kind);
+        const [elements] = await datastore.runQuery(query);
+        elements.forEach(e => datastore.delete(e[datastore.KEY]))
+        resolve()
+    })
+}
+
 /**
  * Get an entity kind with projection and filters
  * @param {string} kind the entity king
@@ -73,4 +82,4 @@ function getWithFilters(kind,projections,filters){
     })
 }
 
-module.exports = { save, get, getWithFilters }
+module.exports = { save, get, getWithFilters, removeAll }

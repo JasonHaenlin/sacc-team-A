@@ -33,4 +33,9 @@ router.post('/task', handleExceptions(async (req, res) => {
 
 }));
 
+router.delete('/', handleExceptions(async (req, res) => {
+    await datastore.removeAll();
+    res.status(200).send("success")
+}));
+
 module.exports = router;

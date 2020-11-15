@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const APIRouter = require("./routes");
+const HeatmapRouter = require("./heatmap");
 const { logTheInfo, logTheError } = require("./middlewares/config/logger");
 const {
   handle404Error,
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api", APIRouter);
+app.use("/heatmap", HeatmapRouter)
 
 app.get("/", (req, res) => {
   res.send("Hello from App Engine!");
