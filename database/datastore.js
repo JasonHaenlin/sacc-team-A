@@ -43,10 +43,10 @@ function get(kind) {
  * @param {[] string}  projections list of projections
  * @param {[] {left : string,middle : string,right : any}} filters filter condition with left representing the resource, middle the operator and right the expected result
  */
-function getWithFilters(kind,projections,...filters){
+function getWithFilters(kind,projections,filters){
     return new Promise(async (resolve, reject) => {
         // Kind
-        const query = datastore.createQuery(kind);
+        let query = datastore.createQuery(kind);
 
         //Projection
         if(projections != null){
@@ -61,7 +61,6 @@ function getWithFilters(kind,projections,...filters){
 
         // Query
         const [elements] = await datastore.runQuery(query);
-        
         // Format result
         logTheInfo(`Get: ${JSON.stringify(elements)}`);
         const elementList = []

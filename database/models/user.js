@@ -52,7 +52,7 @@ const getNumberOfPoi = async () => {
 
 const getPoiUsers = async () => {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT * FROM users WHERE user_status_change_date IS NOT NULL;";
+        const sql = "SELECT sha1 FROM users WHERE user_status_change_date IS NOT NULL;";
         pool.query(sql, [], (err, result) => {
             if (err) {
                 reject(err.message);
@@ -65,6 +65,18 @@ const getPoiUsers = async () => {
 const getUserSha1 = async (sha1) => {
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM users WHERE sha1=$1;";
+        pool.query(sql, [sha1], (err, result) => {
+            if (err) {
+                reject(err.message);
+            }
+            resolve(result.rows[0])
+        });
+    })
+}
+
+const getMailUserSha1 = async (sha1) => {
+    return new Promise((resolve, reject) => {
+        const sql = "SELECT email FROM users WHERE sha1=$1;";
         pool.query(sql, [sha1], (err, result) => {
             if (err) {
                 reject(err.message);

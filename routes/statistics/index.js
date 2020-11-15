@@ -10,7 +10,7 @@ router.get("/", handleExceptions(async (req, res) => {
 	} else if (req.query["numberofpoi"] !== undefined) {
 		valueToReturn = await statsController.getNumberOfPoi();
 	} else {
-		valueToReturn = statsController.test();
+		valueToReturn = statsController.getComplexStats("alexis1953@live.fr");
 	}
 	res.status(200).json(valueToReturn);
 }));
