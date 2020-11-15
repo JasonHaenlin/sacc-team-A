@@ -8,8 +8,6 @@ const userSQL = require('../../database/models/user')
 const datastore = require('../../database/datastore')
 const format = require('date-format');
 
-
-
 class StatsController {
 
     async getComplexStats(mail) {
@@ -17,7 +15,7 @@ class StatsController {
         //let statsResult = {count:10,mails:[]};
 
         let file_id = uuidv4();
-       
+
         let filename = this.makeFileFromStats(statsResult, file_id);
         await this.storeInCloudStorage(filename);
         let file_url = BASE_URL_CLOUD_STORAGE + BUCKET_NAME + "/" + filename.substr(5);
@@ -33,32 +31,25 @@ class StatsController {
         return await userSQL.getNumberOfPoi(); // get poi from DB
     }
 
-
-    calculateSimpleStats() {
-        let registeredUsers = 14000;
-        let poi = 2000;
-        let positionUpdatedNb = 6000;
-    }
-
-    async calculateComplexStats(){
+    async calculateComplexStats() {
         let contactsWithPOILast24hours = []
 
         // First get all users POI
         let array_of_pois = await userSQL.getPoiUsers();
-        
+
         contactsWithPOILast24hours = await this.getContactsWithPois(array_of_pois);
-        
+
         contactsWithPOILast24hours = contactsWithPOILast24hours.map(entry => entry.u1sha1);
         //let mails = await userSQL.getMailUserSha1;
         let countContactsWithPOILast24hours = contactsWithPOILast24hours.length;
         let json = {
-            count : countContactsWithPOILast24hours,
-            mails : contactsWithPOILast24hours
+            count: countContactsWithPOILast24hours,
+            mails: contactsWithPOILast24hours
         }
         return json;
     }
 
-    async getContactsWithPois(pois){
+    async getContactsWithPois(pois) {
         // Yesterday
         let date = new Date();
         date.setDate(date.getDate() - 1);
@@ -66,32 +57,32 @@ class StatsController {
         var contacts = [];
 
         // Foreach  POI (test poi is user1)
-        for(const poi of pois){
-            let listU2sha1 = await datastore.getWithFilters("meeting",["u2sha1"],[ 
-                {left :"u1sha1",middle : "=",right : poi.sha1},
-                {left :"timestamp",middle : ">=",right : date}],
+        for (const poi of pois) {
+            let listU2sha1 = await datastore.getWithFilters("meeting", ["u2sha1"], [
+                { left: "u1sha1", middle: "=", right: poi.sha1 },
+                { left: "timestamp", middle: ">=", right: date }],
             );
             contacts.push.apply(contacts, listU2sha1);
         }
 
-        for(const poi of pois){
-            let listU1sha1 = await datastore.getWithFilters("meeting",["u1sha1"],[ 
-                {left :"u2sha1",middle : "=",right : poi.sha1},
-                {left :"timestamp",middle : ">=",right : date}],
+        for (const poi of pois) {
+            let listU1sha1 = await datastore.getWithFilters("meeting", ["u1sha1"], [
+                { left: "u2sha1", middle: "=", right: poi.sha1 },
+                { left: "timestamp", middle: ">=", right: date }],
             );
             contacts.push.apply(contacts, listU1sha1);
         }
-        
+
         return contacts;
-        
+
     }
 
     makeFileFromStats(json, id) {
         let content = 'Number of person entered in contact with a POI these last 24 hours : ' + json.count.toString() + "\n";
-        json.mails.forEach(mail =>{
-            content+="- "+mail+"\n"
+        json.mails.forEach(mail => {
+            content += "- " + mail + "\n"
         });
-        let filename = '/tmp/'+'stats-' + id + '.txt';
+        let filename = '/tmp/' + 'stats-' + id + '.txt';
         fs.writeFile(filename, content, function (err) {
             if (err) throw err;
             console.log('Saved!');

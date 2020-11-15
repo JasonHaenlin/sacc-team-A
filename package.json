@@ -9,6 +9,7 @@
   "scripts": {
     "start": "NODE_ENV=prod node app.js",
     "dev": "NODE_ENV=dev nodemon app.js",
+    "dev-win": "SET NODE_ENV=development & nodemon app.js",
     "deploy": "gcloud app deploy",
     "datastore": "gcloud beta emulators datastore start",
     "sql": "./cloud_sql_proxy -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
