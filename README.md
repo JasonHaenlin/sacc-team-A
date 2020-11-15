@@ -4,29 +4,30 @@ Welcome to Sacc Team A Project
 
 ## Project
 
-project id  : sacc-team-A
-region      : europe-west
-cloud task  : europe-west1
+project id : sacc-team-A
+region : europe-west
+cloud task : europe-west1
 
 ## To install
 
-```npm install```
+`npm install`
 
-```gcloud config set project sacc-team-a```
+`gcloud config set project sacc-team-a`
 
 ## To run at local
 
-```npm run dev```
+`npm run dev`
 
 ## To deploy
 
-```npm run deploy```
+`npm run deploy`
 
 ## Emulator datastore
 
 ### Prepare
 
 #### Shell
+
 ```
 export DATASTORE_EMULATOR_HOST=localhost:8081
 export DATASTORE_PROJECT_ID=sacc-team-a
@@ -34,6 +35,7 @@ export DATASTORE_USE_PROJECT_ID_AS_APP_ID=true
 ```
 
 #### Powershell
+
 ```powershell
 # to set
 $Env:DATASTORE_EMULATOR_HOST = 8081
@@ -62,6 +64,7 @@ npm run datastore
 ```
 npm run sql
 ```
+
 ## Create task
 
 gcloud tasks queues create default
@@ -99,3 +102,7 @@ default is `F1` for our app
 `max_pending_latency` : the maximum of time a request can wait if the queue if full depending on the max concurrent requests.
 
 `max_concurrent_requests` : maximum number of request on an instance before a new one need to start [max 80, default 10]
+
+## Architecture
+
+![Architecture](/ressources/architecture.png)
