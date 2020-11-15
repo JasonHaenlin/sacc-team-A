@@ -45,7 +45,7 @@ const getNumberOfPoi = async () => {
             if (err) {
                 reject(err.message);
             }
-            resolve(result.rows[0].count)
+            resolve(result.rows[0].count);
         });
     });
 };
@@ -110,4 +110,4 @@ const deleteAll = async () => {
     })
 }
 
-module.exports = { getNumberOfUsers, getNumberOfPoi,getPoiUsers, createUser, getUser, getUserSha1, putUser, deleteAll }
+module.exports = { getNumberOfUsers, getNumberOfPoi, getPoiUsers, createUser, getUser, getUserSha1, putUser, deleteAll }

@@ -7,11 +7,17 @@ const { v4: uuidv4 } = require('uuid');
 const userSQL = require('../../database/models/user')
 const datastore = require('../../database/datastore')
 const format = require('date-format');
+const { stats } = require("../../middlewares/pub-sub/index.js");
+const { logTheError } = require("../../middlewares/config/logger.js");
 
 class StatsController {
 
-    async getComplexStats(mail) {
-        let statsResult = await this.calculateComplexStats();
+    constructor () {
+        // stats.subscribeMessage((message) => this.getNumberOfUsers() /*this.getPoiForLastDay("alexis1953@live.fr")*/, (error) => logTheError(error)); // TODO change mail address
+    }
+
+    async getPoiForLastDay(mail) { // TODO add a parameter that specifies the number of hours we want
+        let statsResult = await this.getContactPoiLast24Hours();
         //let statsResult = {count:10,mails:[]};
 
         let file_id = uuidv4();
@@ -31,7 +37,7 @@ class StatsController {
         return await userSQL.getNumberOfPoi(); // get poi from DB
     }
 
-    async calculateComplexStats() {
+    async getContactPoiLast24Hours() {
         let contactsWithPOILast24hours = []
 
         // First get all users POI

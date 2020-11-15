@@ -6,28 +6,38 @@ const { stats } = require("../../middlewares/pub-sub");
 
 const datastore = require('../../database/datastore');
 
-router.get("/", handleExceptions(async (req, res) => {
+router.get("/simple", handleExceptions(async (req, res) => {
 	let valueToReturn;
+	console.log(req.query["numberofusers"]);
 	if (req.query["numberofusers"] !== undefined) {
+		console.log("nkbdgnfksblnkljsnkljibnkji");
 		valueToReturn = await statsController.getNumberOfUsers();
 	} else if (req.query["numberofpoi"] !== undefined) {
 		valueToReturn = await statsController.getNumberOfPoi();
-	} else {
-		valueToReturn = statsController.getComplexStats("alexis1953@live.fr");
 	}
+	// else {
+	// 	valueToReturn = statsController.getPoiForLastDay("alexis1953@live.fr"); // TODO remove this
+	// }
 	res.status(200).json(valueToReturn);
 }));
 
 router.get("/complex", handleExceptions(async (req, res) => {
-	stats.subscribeMessage((message) => console.log(message));
-	stats.publishMessage(req.body);
-	res.status(200).json("OK");
+	if (req.query["numberofpoi24hours"]) {
+		stats.publishMessage(req.query["numberofpoi24hours"]);
+		//response = statsController.getPoiForLastDay("alexis1953@live.fr");
+	}
+	// else if (req.query["numberofpoi"]) {
+	// 	stats.publishMessage(req.query["numberofpoihours"]);
+	// 	//response = statsController.getPoiForLastDay("alexis1953@live.fr");
+	// }
+	// stats.publishMessage(req.body);
+	res.status(200).json("Request received.");
 }));
 
 router.get('/heatmap', handleExceptions(async (req, res) => {
-	const mettings = await datastore.get('meeting')
+	const mettings = await datastore.get('meeting');
 	res.status(200).json(mettings.map(metting => {
-		return [metting.latitude, metting.longitude]
+		return [metting.latitude, metting.longitude];
 	}))
 }))
 

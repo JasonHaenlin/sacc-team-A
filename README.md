@@ -105,7 +105,11 @@ default is `F1` for our app
 
 ## Pub-sub
 
+Create a topic
 `gcloud pubsub topics create <YOUR_TOPIC_NAME>`
+
+Create a subscription
+`gcloud pubsub subscriptions create <YOUR_SUBSCRIPTION_NAME>`
 
 ## Architecture
 
