@@ -5,7 +5,7 @@ const { QUEUE_ID, PROJECT_ID, QUEUE_LOCATION } = process.env;
 const client = new CloudTasksClient();
 
 module.exports = class BaseTask {
-    constructor(httpMethod, relativeUri) {
+    constructor (httpMethod, relativeUri) {
         this.httpMethod = httpMethod;
         this.relativeUri = relativeUri;
     }

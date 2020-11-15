@@ -2,6 +2,7 @@ const { handleExceptions } = require("../../middlewares/error-handlers");
 const express = require("express");
 const router = express.Router();
 var statsController = require("../../appengine/controller/StatsController.js");
+const { stats } = require("../../middlewares/pub-sub");
 
 const datastore = require('../../database/datastore');
 
@@ -15,6 +16,12 @@ router.get("/", handleExceptions(async (req, res) => {
 		valueToReturn = statsController.getComplexStats("alexis1953@live.fr");
 	}
 	res.status(200).json(valueToReturn);
+}));
+
+router.get("/complex", handleExceptions(async (req, res) => {
+	stats.subscribeMessage((message) => console.log(message));
+	stats.publishMessage(req.body);
+	res.status(200).json("OK");
 }));
 
 router.get('/heatmap', handleExceptions(async (req, res) => {

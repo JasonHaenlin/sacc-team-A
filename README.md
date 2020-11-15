@@ -103,6 +103,10 @@ default is `F1` for our app
 
 `max_concurrent_requests` : maximum number of request on an instance before a new one need to start [max 80, default 10]
 
+## Pub-sub
+
+`gcloud pubsub topics create <YOUR_TOPIC_NAME>`
+
 ## Architecture
 
 ![Architecture](/ressources/architecture.png)
