@@ -28,6 +28,7 @@
   "homepage": "https://github.com/AlexandreLon/sacc-team-A#readme",
   "dependencies": {
     "@google-cloud/datastore": "^6.2.0",
+    "@google-cloud/pubsub": "^2.6.0",
     "@google-cloud/storage": "^5.4.0",
     "@google-cloud/tasks": "^2.1.2",
     "@sendgrid/mail": "^7.4.0",
