@@ -4,6 +4,10 @@ const { sendEmail } = require("../utils/SendMailUtil.js");
 const BUCKET_NAME = "stats-bucket-team-a";
 const BASE_URL_CLOUD_STORAGE = "https://storage.googleapis.com/";
 const { v4: uuidv4 } = require('uuid');
+const userSQL = require('../../database/models/user')
+const datastore = require('../../database/datastore')
+
+
 class StatsController {
 
     async getComplexStats(mail) {
@@ -31,7 +35,7 @@ class StatsController {
         let positionUpdatedNb = 6000;
     }
 
-    calculateComplexStats() {
+    async calculateComplexStats(){
 
         // Yesterday
         let date = new Date();
@@ -40,21 +44,11 @@ class StatsController {
         var contactsWithPOILast24hours = []
 
         // First get all users POI
+        let array_of_pois = await userSQL.getPoiUsers();
+        console.log(array_of_pois);
         
-        // Foreach  POI
-        array.forEach(poi => {
-            result = datastore.createQuery('Meeting')
-            .filter('firstUserSHA1', '=', poi)
-            .filter('secondUserSHA1', '=', poi)
-            .filter('timestamp', '>=',date);
 
-            // result contain all persons in contact with a poi (excluding the poi)
-            result.forEach(contact =>{
-                contactsWithPOILast24hours.push(contact)
-            })
-
-        });
-
+        contactsWithPOILast24hours = this.getContactsWithPois(array_of_pois);
         let countContactsWithPOILast24hours = contactsWithPOILast24hours.length;
         let json = {
             count : countContactsWithPOILast24hours,
@@ -63,8 +57,40 @@ class StatsController {
         return json;
     }
 
-    makeFileFromStats(nb, id) {
-        let content = 'Number of person entered in contact with a POI these last 24 hours : ' + nb.toString() + "\n";
+    async getContactsWithPois(pois){
+        contacts = []
+        // Foreach  POI (test poi is user1)
+        pois.forEach(async (poi)  => {
+            const listU2sha1 = await datastore.getWithFilter("meeting",["u2sha1"], [
+                {left :"u1sha1",middle : "=",right : poi},
+                {left :"timestamp",middle : ">=",right : date},
+            ]);
+            console.log(listU2sha1);
+
+            contacts.push.apply(contacts, listU2sha1);
+       
+
+        });
+
+        // Foreach  POI (test poi is user2)
+        pois.forEach(async (poi)  => {
+            const listU1sha1 = await datastore.getWithFilter("meeting", ["u1sha1"],[
+                {left :"u2sha1",middle : "=",right : poi},
+                {left :"timestamp",middle : ">=",right : date},
+            ]);
+            contacts.push.apply(contacts, listU1sha1);
+
+        });
+
+        return contacts;
+        
+    }
+
+    makeFileFromStats(json, id) {
+        let content = 'Number of person entered in contact with a POI these last 24 hours : ' + json.count.toString() + "\n";
+        json.mails.forEach(mail =>{
+            content+=mail+"\n"
+        });
         let filename = 'stats-' + id + '.txt';
         fs.writeFile(filename, content, function (err) {
             if (err) throw err;

@@ -37,4 +37,41 @@ function get(kind) {
     })
 }
 
-module.exports = { save, get }
+/**
+ * Get an entity kind with projection and filters
+ * @param {string} kind the entity king
+ * @param {[] string}  projections list of projections
+ * @param {[] {left : string,middle : string,right : any}} filters filter condition with left representing the resource, middle the operator and right the expected result
+ */
+function getWithFilters(kind,projections,...filters){
+    return new Promise(async (resolve, reject) => {
+        // Kind
+        const query = datastore.createQuery(kind);
+
+        //Projection
+        if(projections != null){
+            if(projections.length > 0){
+                query = query.select(projections);
+            }
+        }
+        //Filters
+        filters.forEach(filter => {
+            query = query.filter(filter.left,filter.middle,filter.right);
+        });
+
+        // Query
+        const [elements] = await datastore.runQuery(query);
+        
+        // Format result
+        logTheInfo(`Get: ${JSON.stringify(elements)}`);
+        const elementList = []
+        for (const element of elements) {
+            const elementKey = element[datastore.KEY];
+            element.id = elementKey.id
+            elementList.push(element)
+        }
+        resolve(elementList)
+    })
+}
+
+module.exports = { save, get, getWithFilters }
