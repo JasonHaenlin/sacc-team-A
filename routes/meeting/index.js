@@ -4,7 +4,8 @@ const { addMeeting } = require('../../middlewares/tasks');
 const validateMeeting = require("../../middlewares/models/meeting");
 const express = require('express');
 const router = express.Router();
-const datastore = require('../../database/datastore')
+const datastore = require('../../database/datastore');
+const { logTheInfo } = require('../../middlewares/config/logger');
 
 router.get('/', handleExceptions(async (req, res) => {
     const meetings = await datastore.get("meeting");
