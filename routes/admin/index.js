@@ -16,7 +16,6 @@ router.post('/', handleExceptions(async (req, res) => {
     if (error) {
         throw new ValidationError(`Admin does not match schema ${admin}`, error);
     }
-    addAdmin.createTask(admin);
     res.status(200).json("Task Sent");
 }));
 

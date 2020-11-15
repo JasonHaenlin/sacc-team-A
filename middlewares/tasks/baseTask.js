@@ -11,6 +11,7 @@ module.exports = class BaseTask {
     }
 
     async createTask(payload) {
+
         const parent = client.queuePath(PROJECT_ID, QUEUE_LOCATION, QUEUE_ID);
         const task = {
             appEngineHttpRequest: {
@@ -21,13 +22,16 @@ module.exports = class BaseTask {
                 },
             },
         };
+
         logTheTransaction(`Sending task: ${this.httpMethod} ${this.relativeUri}`, payload);
         if (payload) {
             task.appEngineHttpRequest.body = Buffer.from(JSON.stringify(payload)).toString('base64');
         }
+
         const request = { parent, task };
         const [response] = await client.createTask(request);
         logTheTransaction(`Created task:`, `${response.name}`);
+
     }
 
 }

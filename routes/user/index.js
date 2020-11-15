@@ -1,12 +1,12 @@
 const { handleExceptions } = require('../../middlewares/error-handlers');
 const { ValidationError, NotFoundError } = require('../../middlewares/errors');
 const { ensureIsAdmin } = require("../../middlewares/authorization");
-const { addUser } = require("../../middlewares/tasks");
+const { addUser, updateUserPoi } = require("../../middlewares/tasks");
 const { logTheInfo } = require('../../middlewares/config/logger');
 const validateUser = require("../../middlewares/models/user");
 const express = require('express');
 const router = express.Router();
-const userSQL = require('../../database/models/user')
+const userSQL = require('../../database/models/user');
 
 /**
  * Get all the users
@@ -47,8 +47,8 @@ router.put('/:sha1', handleExceptions(ensureIsAdmin), handleExceptions(async (re
         throw new NotFoundError(`User not found with sha1 ${sha1}`);
     }
     user.user_status_change_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    const model = await userSQL.putUser(sha1, user);
-    res.status(201).json(model);
+    updateUserPoi.createTask(user);
+    res.status(200).json("Task Sent");
 }));
 
 /**
@@ -66,6 +66,15 @@ router.post('/task', handleExceptions(async (req, res) => {
     logTheInfo('Received task with payload: %s', req.body);
     await userSQL.createUser(req.body);
     res.status(201).send(`Printed task payload: ${req.body}`);
+}));
+
+/**
+ * Task to update a user poi
+ */
+router.put('/task', handleExceptions(async (req, res) => {
+    logTheInfo('Received task with payload: %s', req.body);
+    const model = await userSQL.putUser(sha1, user);
+    res.status(200).send(`Printed task payload: ${model}`);
 }));
 
 module.exports = router;
