@@ -16,13 +16,13 @@ router.post('/', handleExceptions(async (req, res) => {
     if (error) {
         throw new ValidationError(`Admin does not match schema ${admin}`, error);
     }
+    addAdmin.createTask(admin);
     res.status(200).json("Task Sent");
 }));
 
 /**
  * Get admins (testing purpose)
  * @param {object} req.body list of admin
- * @param {string} req.body.email email of a user (eg : contact@teamsacca.com)
  */
 router.get('/', handleExceptions(async (req, res) => {
     const admins = await adminSQL.getAdmins();
@@ -30,10 +30,22 @@ router.get('/', handleExceptions(async (req, res) => {
 }));
 
 /**
+
+/**
+ * Get admins (testing purpose)
+ * @param {object} req.body admin
+ * @param {string} req.body.email email of a user (eg : contact@teamsacca.com)
+ */
+router.get('/detail/:email', handleExceptions(async (req, res) => {
+    const admins = await adminSQL.getAdmin(req.params.email);
+    res.status(200).json(admins);
+}));
+
+/**
  * Task to post a new admin
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    logTheInfo('Received task with payload: %s', req.body);
+    logTheInfo(`Received task with payload: ${req.body}`);
     await adminSQL.createAdmin(req.body);
     res.status(201).send(`Printed task payload: ${req.body}`);
 }));

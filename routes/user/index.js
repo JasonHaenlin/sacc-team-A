@@ -63,7 +63,7 @@ router.delete('/', handleExceptions(async (req, res) => {
  * Task to post a new user
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    logTheInfo('Received task with payload: %s', req.body);
+    logTheInfo(`Received task with payload: ${req.body}`);
     await userSQL.createUser(req.body);
     res.status(201).send(`Printed task payload: ${req.body}`);
 }));
@@ -71,9 +71,9 @@ router.post('/task', handleExceptions(async (req, res) => {
 /**
  * Task to update a user poi
  */
-router.put('/task', handleExceptions(async (req, res) => {
-    logTheInfo('Received task with payload: %s', req.body);
-    const model = await userSQL.putUser(sha1, user);
+router.put('/task/poi', handleExceptions(async (req, res) => {
+    logTheInfo(`Received task with payload: ${req.body} with sha1 ${req.body.sha1}`);
+    const model = await userSQL.putUser(req.body.sha1, req.body);
     res.status(200).send(`Printed task payload: ${model}`);
 }));
 

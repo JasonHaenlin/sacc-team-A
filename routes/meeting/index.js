@@ -12,6 +12,14 @@ router.get('/', handleExceptions(async (req, res) => {
     res.status(200).json(meetings);
 }));
 
+/**
+ * Create a new meeting point
+ * @param {string} req.body.u1sha1 identify a user (should be a length of 10 using a-zA-Z0-9)
+ * @param {string} req.body.u2sha1 identify a user (should be a length of 10 using a-zA-Z0-9)
+ * @param {number} req.body.latitude coordinate latitude of the meeting
+ * @param {number} req.body.longitude coordinate longitude of the meeting
+ * @param {date} req.body.timestamp date as a timestamp or none if not set
+ */
 router.post('/', handleExceptions(async (req, res) => {
     const meeting = req.body;
     const { error } = validateMeeting(meeting);
@@ -26,7 +34,7 @@ router.post('/', handleExceptions(async (req, res) => {
  * Task to post a new meeting
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    logTheInfo('Received task with payload: %s', req.body);
+    logTheInfo(`Received task with payload: ${req.body}`);
     req.body.timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const meeting = await datastore.save("meeting", req.body);
     res.status(201).send(`Printed task payload: ${meeting}`).end();

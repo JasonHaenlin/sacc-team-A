@@ -63,7 +63,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "admin@tochange.fr",
+										"value": "jh.notif+1@gmail.com",
 										"description": "email of an existing admin in the system",
 										"type": "text"
 									}
@@ -80,7 +80,7 @@
 									"variable": [
 										{
 											"key": "sha1",
-											"value": "0123456789",
+											"value": "t6bnasdbxf",
 											"description": "sha1 of an existing user in the system"
 										}
 									]
@@ -121,7 +121,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\":\"teama@sacc.fr\"\r\n}",
+									"raw": "{\r\n    \"email\":\"teamab@sacc.fr\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -153,6 +153,32 @@
 									],
 									"path": [
 										"admin"
+									]
+								},
+								"description": "retrieve all the admins with there email (testing purpose)"
+							},
+							"response": []
+						},
+						{
+							"name": "GET admin",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/admin/detail/:email",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin",
+										"detail",
+										":email"
+									],
+									"variable": [
+										{
+											"key": "email",
+											"value": "jh.notif+1@gmail.com"
+										}
 									]
 								},
 								"description": "retrieve all the admins with there email (testing purpose)"
@@ -236,6 +262,57 @@
 											"key": "numberofusers",
 											"value": null
 										},
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						},
+						{
+							"name": "GET heatmap data",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/stats/heatmap",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"stats",
+										"heatmap"
+									],
+									"query": [
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						},
+						{
+							"name": "GET heatmap view",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url_short}}/heatmap",
+									"host": [
+										"{{base_url_short}}"
+									],
+									"path": [
+										"heatmap"
+									],
+									"query": [
 										{
 											"key": "numberofpoi",
 											"value": null,
@@ -374,7 +451,11 @@
 								"id": "c36301e6-268a-48c4-b531-73517ade8d07",
 								"exec": [
 									"pm.environment.set(\"userCount\", 100);\r",
-									"pm.environment.set(\"adminCount\", 10);"
+									"pm.environment.set(\"poiCount\", 20);\r",
+									"pm.environment.set(\"adminCount\", 5);\r",
+									"pm.environment.set(\"usersSha1\", []);\r",
+									"pm.environment.set(\"usersSha1m\", []);\r",
+									"pm.environment.set(\"adminEmail\", \"\");"
 								],
 								"type": "text/javascript"
 							}
@@ -446,7 +527,65 @@
 					"response": []
 				},
 				{
-					"name": "POST user",
+					"name": "POST admins",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b60630b5-d519-48e0-80f2-72d7d36deab3",
+								"exec": [
+									"let currentCount = pm.environment.get(\"adminCount\");\r",
+									"\r",
+									"if (currentCount > 1){\r",
+									"    currentCount = currentCount -1 ;\r",
+									"    pm.environment.set(\"adminCount\", currentCount);\r",
+									"    postman.setNextRequest(\"POST admins\");\r",
+									"} else {\r",
+									"    setTimeout(function(){}, 2500);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0f5f5854-3245-485e-9242-f3268dbf54d3",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"jh.notif+{{adminCount}}@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin"
+							]
+						},
+						"description": "Add a new admin with an email"
+					},
+					"response": []
+				},
+				{
+					"name": "POST users",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -456,7 +595,17 @@
 									"function generateId() {\r",
 									"   return  [...Array(10)].map(i=>(~~(Math.random()*36)).toString(36)).join('');\r",
 									"}\r",
-									"pm.environment.set(\"sha1\", generateId());"
+									"\r",
+									"let savedUsersSha1 = pm.environment.get(\"usersSha1\");\r",
+									"let savedUsersSha1m = pm.environment.get(\"usersSha1m\");\r",
+									"\r",
+									"savedUsersSha1.push(pm.environment.get(\"sha1\"));\r",
+									"savedUsersSha1m.push(pm.environment.get(\"sha1\"));\r",
+									"\r",
+									"pm.environment.set(\"usersSha1\", savedUsersSha1);\r",
+									"pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
+									"pm.environment.set(\"sha1\", generateId());\r",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -467,11 +616,15 @@
 								"id": "fbaae93a-3117-4f8c-8f27-90ef7f78b0fa",
 								"exec": [
 									"let currentCount = pm.environment.get(\"userCount\");\r",
+									"let savedUsersSha1m = pm.environment.get(\"usersSha1m\");\r",
 									"\r",
 									"if (currentCount > 1){\r",
 									"    currentCount = currentCount -1 ;\r",
 									"    pm.environment.set(\"userCount\", currentCount);\r",
-									"    postman.setNextRequest(\"POST user\");\r",
+									"    postman.setNextRequest(\"POST users\");\r",
+									"} else if(savedUsersSha1m % 2 == 1) {\r",
+									"    savedUsersSha1m.pop();\r",
+									"    pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
 									"}\r",
 									""
 								],
@@ -505,20 +658,61 @@
 					"response": []
 				},
 				{
-					"name": "POST admin",
+					"name": "POST meetings",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "b60630b5-d519-48e0-80f2-72d7d36deab3",
+								"id": "46e5e575-3a0a-45e0-bbb1-488b1436d3ca",
 								"exec": [
-									"let currentCount = pm.environment.get(\"adminCount\");\r",
-									"\r",
-									"if (currentCount > 1){\r",
-									"    currentCount = currentCount -1 ;\r",
-									"    pm.environment.set(\"adminCount\", currentCount);\r",
-									"    postman.setNextRequest(\"POST admin\");\r",
+									"if(pm.environment.get(\"usersSha1m\").length >= 2) {\r",
+									"    postman.setNextRequest(\"POST meetings\");\r",
+									"} else {\r",
+									"    setTimeout(function(){}, 7500);\r",
 									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e7663196-9b3e-4637-b682-527122abcd51",
+								"exec": [
+									"// ----------\r",
+									"// https://gist.github.com/mkhatib/5641004\r",
+									"function generateRandomPoint(center, radius) {\r",
+									"  var x0 = center.lng;\r",
+									"  var y0 = center.lat;\r",
+									"  // Convert Radius from meters to degrees.\r",
+									"  var rd = radius/111300;\r",
+									"\r",
+									"  var u = Math.random();\r",
+									"  var v = Math.random();\r",
+									"\r",
+									"  var w = rd * Math.sqrt(u);\r",
+									"  var t = 2 * Math.PI * v;\r",
+									"  var x = w * Math.cos(t);\r",
+									"  var y = w * Math.sin(t);\r",
+									"\r",
+									"  var xp = x/Math.cos(y0);\r",
+									"\r",
+									"  return {'lat': y+y0, 'lng': xp+x0};\r",
+									"}\r",
+									"// ----------\r",
+									"\r",
+									"const randomGeoPoints = generateRandomPoint({'lat':43.73, 'lng':6.82}, 1000);\r",
+									"\r",
+									"pm.environment.set(\"lat\", randomGeoPoints.lat);\r",
+									"pm.environment.set(\"lng\", randomGeoPoints.lng);\r",
+									"\r",
+									"let savedUsersSha1m = pm.environment.get(\"usersSha1m\");\r",
+									"\r",
+									"pm.environment.set(\"sha11\", savedUsersSha1m.pop());\r",
+									"pm.environment.set(\"sha12\", savedUsersSha1m.pop());\r",
+									"\r",
+									"pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
 									""
 								],
 								"type": "text/javascript"
@@ -530,7 +724,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"jh.notif+{{adminCount}}@gmail.com\"\r\n}",
+							"raw": "{\r\n    \"u1sha1\":\"{{sha11}}\",\r\n    \"u2sha1\":\"{{sha12}}\",\r\n    \"latitude\":{{lat}},\r\n    \"longitude\":{{lng}}\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -538,17 +732,100 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/admin",
+							"raw": "{{base_url}}/meeting",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"admin"
+								"meeting"
 							]
 						},
-						"description": "Add a new admin with an email"
+						"description": "Add a new meeting point between two people"
 					},
 					"response": []
+				},
+				{
+					"name": "PUT users POI",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "85c5e2e1-1da7-487b-9ff6-4bc1bf575608",
+								"exec": [
+									"let usersSha1 = pm.environment.get(\"usersSha1\");\r",
+									"\r",
+									"pm.environment.set(\"sha1\", usersSha1.pop());\r",
+									"pm.environment.set(\"adminEmail\", \"jh.notif+1@gmail.com\");\r",
+									"\r",
+									"pm.environment.set(\"usersSha1\",usersSha1);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fa3ea446-a95f-42db-8eac-356dc469df8a",
+								"exec": [
+									"let poiToPut = pm.environment.get(\"poiCount\");\r",
+									"let usersSha1 = pm.environment.get(\"usersSha1\");\r",
+									"\r",
+									"if (usersSha1.length > poiToPut){\r",
+									"    postman.setNextRequest(\"PUT users POI\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"description": "email of an existing admin in the system",
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{adminEmail}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/{{sha1}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"{{sha1}}"
+							]
+						},
+						"description": "Update the user POI at the current date of the request\r\nAn header authorization must be set corresponding to the valid email of an admin"
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8bdd51ff-5f25-41ab-9cd3-16483175e2ca",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4b3e3599-391b-45c6-9b9e-5ad7e0109db2",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.expect(pm.response.code).to.be.oneOf([200,201]);",
+							"});"
+						]
+					}
 				}
 			],
 			"protocolProfileBehavior": {}
