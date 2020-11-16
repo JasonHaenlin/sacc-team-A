@@ -8,9 +8,7 @@ const datastore = require('../../database/datastore');
 
 router.get("/simple", handleExceptions(async (req, res) => {
 	let valueToReturn;
-	console.log(req.query["numberofusers"]);
 	if (req.query["numberofusers"] !== undefined) {
-		console.log("nkbdgnfksblnkljsnkljibnkji");
 		valueToReturn = await statsController.getNumberOfUsers();
 	} else if (req.query["numberofpoi"] !== undefined) {
 		valueToReturn = await statsController.getNumberOfPoi();
