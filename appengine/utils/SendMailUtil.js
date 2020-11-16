@@ -11,7 +11,7 @@ const sendgrid = require('@sendgrid/mail');
  * @param {string} req.body.from_name Name of the sender.
  * @param {object} res Cloud Function response context.
  */
-exports.sendEmail = async ( to_email,subject,content) =>{
+exports.sendEmail = async (to_email, subject, content) => {
   // Get the SendGrid API key from the environment variable.
   const key = process.env.SENDGRID_API_KEY;
   if (!key) {
@@ -38,15 +38,14 @@ exports.sendEmail = async ( to_email,subject,content) =>{
   };
 
   try {
-    sendgrid.send(msg).then((res)=>{
-       // console.log(res);
-    }).catch((error)=>{
+    sendgrid.send(msg).then((res) => {
+    }).catch((error) => {
       console.log(error.response.body);
-        console.log(error);
+      console.log(error);
     });
     // Send OK to Cloud Task queue to delete task.
   } catch (error) {
-      console.log(error);
-    // Any status code other than 2xx or 503 will trigger the task to retry.  
+    console.log(error);
+    // Any status code other than 2xx or 503 will trigger the task to retry.
   }
 };

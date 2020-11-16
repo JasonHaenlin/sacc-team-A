@@ -12,20 +12,18 @@ const { logTheError } = require("../../middlewares/config/logger.js");
 
 class StatsController {
 
-    constructor () {
+    constructor() {
         this.meetingsForHeatmap = [];
 
         stats.subscribeMessage((message) => {
-            console.log("received");
-            this.getPoiForLastDay("alexis1953@live.fr"); // TODO change mail address
+            this.getPoiForLastDay(process.env.EMAIL_SENDER); // TODO change mail address
             message.ack();
-            console.log("ack");
         }, (error) => {
             logTheError(error)
         });
 
         heatmapPubSub.subscribeMessage((message) => {
-            this.generateHeatmap("younes.abdennadher@etu.unice.fr"); // TODO change mail address
+            this.generateHeatmap(process.env.EMAIL_SENDER); // TODO change mail address
             message.ack();
         }, (error) => {
             logTheError(error);
@@ -35,12 +33,10 @@ class StatsController {
     generateHeatmap(mail) {
         return new Promise(async (resolve) => {
             const meetings = await datastore.get('meeting');
-            console.log("COUCOU");
             this.meetingsForHeatmap = meetings.map(meeting => {
                 return [meeting.latitude, meeting.longitude];
             });
-            // console.log("COUCOU");
-            this.sendMailWithLink(mail, "https://sacc-team-a.ew.r.appspot.com/heatmap");
+            // this.sendMailWithLink(mail, "https://sacc-team-a.ew.r.appspot.com/heatmap");
             resolve();
         });
     }
@@ -57,7 +53,7 @@ class StatsController {
         let filename = await this.makeFileFromStats(statsResult, file_id);
         await this.storeInCloudStorage(filename);
         let file_url = BASE_URL_CLOUD_STORAGE + BUCKET_NAME + "/" + filename.substr(5);
-        this.sendMailWithLink(mail, file_url);
+        // this.sendMailWithLink(mail, file_url);
     }
 
     async getNumberOfUsers() {
@@ -75,7 +71,6 @@ class StatsController {
         let array_of_pois = await userSQL.getPoiUsers();
 
         contactsWithPOILast24hours = await this.getContactsWithPois(array_of_pois);
-        console.log(contactsWithPOILast24hours);
         contactsWithPOILast24hours = contactsWithPOILast24hours.map(entry => entry.u1sha1);
         //let mails = await userSQL.getMailUserSha1;
         let countContactsWithPOILast24hours = contactsWithPOILast24hours.length;
@@ -89,7 +84,7 @@ class StatsController {
         // Yesterday
         let date = new Date();
         date.setDate(date.getDate() - 1);
-        date = format.asString('yyyy-MM-dd hh:mm:ss', date);
+        // date = format.asString('yyyy-MM-dd hh:mm:ss', date);
         var contacts = [];
 
 
@@ -132,14 +127,13 @@ class StatsController {
         let filename = '/tmp/' + 'stats-' + id + '.txt';
         fs.writeFile(filename, content, function (err) {
             if (err) throw err;
-            console.log('Saved!');
         });
         return filename;
     }
 
     /**
      * Create a file in cloud storage from a local file given and return a promise of the file link on cloud storage
-     * @param file 
+     * @param file
      */
     async storeInCloudStorage(file) {
         await uploadFile(BUCKET_NAME, file);

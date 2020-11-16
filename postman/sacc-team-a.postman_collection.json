@@ -236,6 +236,24 @@
 								"description": "Add a new meeting point between two people"
 							},
 							"response": []
+						},
+						{
+							"name": "DELETE meeting",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/meeting",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"meeting"
+									]
+								},
+								"description": "Retrieve all the meetings"
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -250,12 +268,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base_url}}/stat?numberofusers",
+									"raw": "{{base_url}}/stats/simple?numberofusers",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
-										"stat"
+										"stats",
+										"simple"
 									],
 									"query": [
 										{
@@ -317,6 +336,66 @@
 											"key": "numberofpoi",
 											"value": null,
 											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						},
+						{
+							"name": "GET stats complex heatmap mail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/stats/complex?generateheatmap",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"stats",
+										"complex"
+									],
+									"query": [
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "generateheatmap",
+											"value": null
+										}
+									]
+								},
+								"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+							},
+							"response": []
+						},
+						{
+							"name": "GET stats complex nb poi",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/stats/complex?numberofpoi24hours",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"stats",
+										"complex"
+									],
+									"query": [
+										{
+											"key": "numberofpoi",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "numberofpoi24hours",
+											"value": null
 										}
 									]
 								},
@@ -450,7 +529,7 @@
 							"script": {
 								"id": "c36301e6-268a-48c4-b531-73517ade8d07",
 								"exec": [
-									"pm.environment.set(\"userCount\", 100);\r",
+									"pm.environment.set(\"userCount\", 500);\r",
 									"pm.environment.set(\"poiCount\", 20);\r",
 									"pm.environment.set(\"adminCount\", 5);\r",
 									"pm.environment.set(\"usersSha1\", []);\r",
@@ -588,9 +667,30 @@
 					"name": "POST users",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"id": "59ab370a-7bd7-4dcb-92f0-ed25afa140b9",
+								"exec": [
+									"let currentCount = pm.environment.get(\"userCount\");\r",
+									"let savedUsersSha1m = pm.environment.get(\"usersSha1m\");\r",
+									"\r",
+									"if (currentCount > 1){\r",
+									"    currentCount = currentCount -1 ;\r",
+									"    pm.environment.set(\"userCount\", currentCount);\r",
+									"    postman.setNextRequest(\"POST users\");\r",
+									"} else if(savedUsersSha1m % 2 == 1) {\r",
+									"    savedUsersSha1m.pop();\r",
+									"    pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "796d68f2-abb9-4af6-aeec-b3d08d4ceafe",
+								"id": "9219382c-42d7-4509-9d73-bc9cd29019d4",
 								"exec": [
 									"function generateId() {\r",
 									"   return  [...Array(10)].map(i=>(~~(Math.random()*36)).toString(36)).join('');\r",
@@ -605,27 +705,6 @@
 									"pm.environment.set(\"usersSha1\", savedUsersSha1);\r",
 									"pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
 									"pm.environment.set(\"sha1\", generateId());\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "fbaae93a-3117-4f8c-8f27-90ef7f78b0fa",
-								"exec": [
-									"let currentCount = pm.environment.get(\"userCount\");\r",
-									"let savedUsersSha1m = pm.environment.get(\"usersSha1m\");\r",
-									"\r",
-									"if (currentCount > 1){\r",
-									"    currentCount = currentCount -1 ;\r",
-									"    pm.environment.set(\"userCount\", currentCount);\r",
-									"    postman.setNextRequest(\"POST users\");\r",
-									"} else if(savedUsersSha1m % 2 == 1) {\r",
-									"    savedUsersSha1m.pop();\r",
-									"    pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
-									"}\r",
 									""
 								],
 								"type": "text/javascript"
@@ -702,7 +781,7 @@
 									"}\r",
 									"// ----------\r",
 									"\r",
-									"const randomGeoPoints = generateRandomPoint({'lat':43.73, 'lng':6.82}, 1000);\r",
+									"const randomGeoPoints = generateRandomPoint({'lat':43.729374, 'lng':7.254231}, 10000 );\r",
 									"\r",
 									"pm.environment.set(\"lat\", randomGeoPoints.lat);\r",
 									"pm.environment.set(\"lng\", randomGeoPoints.lng);\r",
@@ -710,7 +789,7 @@
 									"let savedUsersSha1m = pm.environment.get(\"usersSha1m\");\r",
 									"\r",
 									"pm.environment.set(\"sha11\", savedUsersSha1m.pop());\r",
-									"pm.environment.set(\"sha12\", savedUsersSha1m.pop());\r",
+									"pm.environment.set(\"sha12\", savedUsersSha1m[0]);\r",
 									"\r",
 									"pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
 									""
