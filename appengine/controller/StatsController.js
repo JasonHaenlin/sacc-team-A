@@ -4,15 +4,17 @@ const { sendEmail } = require("../utils/SendMailUtil.js");
 const BUCKET_NAME = "stats-bucket-team-a";
 const BASE_URL_CLOUD_STORAGE = "https://storage.googleapis.com/";
 const { v4: uuidv4 } = require('uuid');
-const userSQL = require('../../database/models/user')
-const datastore = require('../../database/datastore')
+const userSQL = require('../../database/models/user');
+const datastore = require('../../database/datastore');
 const format = require('date-format');
-const { stats } = require("../../middlewares/pub-sub/index.js");
+const { stats, heatmapPubSub } = require("../../middlewares/pub-sub/index.js");
 const { logTheError } = require("../../middlewares/config/logger.js");
 
 class StatsController {
 
     constructor () {
+        this.meetingsForHeatmap = [];
+
         stats.subscribeMessage((message) => {
             console.log("received");
             this.getPoiForLastDay("alexis1953@live.fr"); // TODO change mail address
@@ -21,9 +23,33 @@ class StatsController {
         }, (error) => {
             logTheError(error)
         });
+
+        heatmapPubSub.subscribeMessage((message) => {
+            this.generateHeatmap("younes.abdennadher@etu.unice.fr"); // TODO change mail address
+            message.ack();
+        }, (error) => {
+            logTheError(error);
+        });
     }
 
-    async getPoiForLastDay(mail) { 
+    generateHeatmap(mail) {
+        return new Promise(async (resolve) => {
+            const meetings = await datastore.get('meeting');
+            console.log("COUCOU");
+            this.meetingsForHeatmap = meetings.map(meeting => {
+                return [meeting.latitude, meeting.longitude];
+            });
+            // console.log("COUCOU");
+            this.sendMailWithLink(mail, "https://sacc-team-a.ew.r.appspot.com/heatmap");
+            resolve();
+        });
+    }
+
+    getMeetingsForHeatmap() {
+        return this.meetingsForHeatmap;
+    }
+
+    async getPoiForLastDay(mail) {
         let statsResult = await this.getContactPoiLast24Hours();
         //let statsResult = {count:10,mails:[]};
         let file_id = uuidv4();
@@ -66,7 +92,7 @@ class StatsController {
         date = format.asString('yyyy-MM-dd hh:mm:ss', date);
         var contacts = [];
 
-    
+
         // Foreach  POI (test poi is user1 and user2)
         for (const poi of pois) {
             let listU1sha1 = await datastore.getWithFilters("meeting", ["u1sha1"], [
@@ -77,10 +103,10 @@ class StatsController {
                 { left: "u1sha1", middle: "=", right: poi.sha1 },
                 { left: "timestamp", middle: ">=", right: date }],
             );
-            
+
             listU1sha1.push.apply(listU1sha1, listU2sha1);
-            if(listU1sha1.length > 0){
-                let json = {poi : poi.sha1,contacts : listU1sha1}
+            if (listU1sha1.length > 0) {
+                let json = { poi: poi.sha1, contacts: listU1sha1 }
                 contacts.push(json);
             }
             //contacts.push.apply(contacts, listU1sha1);
@@ -93,12 +119,12 @@ class StatsController {
     async makeFileFromStats(json, id) {
         let count = 0;
         let content = '';
-    
+
         json.contacts.forEach(line => {
-            content += "- " + line.poi+" : " + "\n"
-            line.contacts.forEach(contact =>{
-                content += "        - " + contact+" : " + "\n";
-                count ++;
+            content += "- " + line.poi + " : " + "\n"
+            line.contacts.forEach(contact => {
+                content += "        - " + contact + " : " + "\n";
+                count++;
             });
         });
         content = 'Total number of person entered in contact with a POI these last 24 hours : ' + count.toString() + "\n";
@@ -120,8 +146,7 @@ class StatsController {
     }
 
     sendMailWithLink(mailAdress, link) {
-        console.log(link);
-        sendEmail(mailAdress, "Link to statistics", "Stats file available here: " + link + "\n Regards, \n Team A");
+        sendEmail(mailAdress, "Link to statistics/heatmap", "Your file is available here: \n" + link + "\n\n Regards, \n Team A");
     }
 }
 

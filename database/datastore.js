@@ -52,20 +52,20 @@ function removeAll(kind) {
  * @param {[] string}  projections list of projections
  * @param {[] {left : string,middle : string,right : any}} filters filter condition with left representing the resource, middle the operator and right the expected result
  */
-function getWithFilters(kind,projections,filters){
+function getWithFilters(kind, projections, filters) {
     return new Promise(async (resolve, reject) => {
         // Kind
         let query = datastore.createQuery(kind);
 
         //Projection
-        if(projections != null){
-            if(projections.length > 0){
+        if (projections != null) {
+            if (projections.length > 0) {
                 query = query.select(projections);
             }
         }
         //Filters
         filters.forEach(filter => {
-            query = query.filter(filter.left,filter.middle,filter.right);
+            query = query.filter(filter.left, filter.middle, filter.right);
         });
 
         // Query
