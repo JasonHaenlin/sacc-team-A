@@ -14,24 +14,24 @@ class StatsController {
 
     constructor () {
         stats.subscribeMessage((message) => {
+            console.log("received");
             this.getPoiForLastDay("alexis1953@live.fr"); // TODO change mail address
             message.ack();
+            console.log("ack");
         }, (error) => {
             logTheError(error)
         });
     }
 
-    async getPoiForLastDay(mail) { // TODO add a parameter that specifies the number of hours we want
+    async getPoiForLastDay(mail) { 
         let statsResult = await this.getContactPoiLast24Hours();
         //let statsResult = {count:10,mails:[]};
-
         let file_id = uuidv4();
 
-        let filename = this.makeFileFromStats(statsResult, file_id);
+        let filename = await this.makeFileFromStats(statsResult, file_id);
         await this.storeInCloudStorage(filename);
         let file_url = BASE_URL_CLOUD_STORAGE + BUCKET_NAME + "/" + filename.substr(5);
         this.sendMailWithLink(mail, file_url);
-        //this.deleteFileFs(filename);
     }
 
     async getNumberOfUsers() {
@@ -49,13 +49,12 @@ class StatsController {
         let array_of_pois = await userSQL.getPoiUsers();
 
         contactsWithPOILast24hours = await this.getContactsWithPois(array_of_pois);
-
+        console.log(contactsWithPOILast24hours);
         contactsWithPOILast24hours = contactsWithPOILast24hours.map(entry => entry.u1sha1);
         //let mails = await userSQL.getMailUserSha1;
         let countContactsWithPOILast24hours = contactsWithPOILast24hours.length;
         let json = {
-            count: countContactsWithPOILast24hours,
-            mails: contactsWithPOILast24hours
+            contacts: contactsWithPOILast24hours
         }
         return json;
     }
@@ -67,42 +66,49 @@ class StatsController {
         date = format.asString('yyyy-MM-dd hh:mm:ss', date);
         var contacts = [];
 
-        // Foreach  POI (test poi is user1)
-        for (const poi of pois) {
-            let listU2sha1 = await datastore.getWithFilters("meeting", ["u2sha1"], [
-                { left: "u1sha1", middle: "=", right: poi.sha1 },
-                { left: "timestamp", middle: ">=", right: date }],
-            );
-            contacts.push.apply(contacts, listU2sha1);
-        }
-
+    
+        // Foreach  POI (test poi is user1 and user2)
         for (const poi of pois) {
             let listU1sha1 = await datastore.getWithFilters("meeting", ["u1sha1"], [
                 { left: "u2sha1", middle: "=", right: poi.sha1 },
                 { left: "timestamp", middle: ">=", right: date }],
             );
-            contacts.push.apply(contacts, listU1sha1);
+            let listU2sha1 = await datastore.getWithFilters("meeting", ["u2sha1"], [
+                { left: "u1sha1", middle: "=", right: poi.sha1 },
+                { left: "timestamp", middle: ">=", right: date }],
+            );
+            
+            listU1sha1.push.apply(listU1sha1, listU2sha1);
+            if(listU1sha1.length > 0){
+                let json = {poi : poi.sha1,contacts : listU1sha1}
+                contacts.push(json);
+            }
+            //contacts.push.apply(contacts, listU1sha1);
         }
 
         return contacts;
 
     }
 
-    makeFileFromStats(json, id) {
-        let content = 'Number of person entered in contact with a POI these last 24 hours : ' + json.count.toString() + "\n";
-        json.mails.forEach(mail => {
-            content += "- " + mail + "\n"
+    async makeFileFromStats(json, id) {
+        let count = 0;
+        let content = '';
+    
+        json.contacts.forEach(line => {
+            content += "- " + line.poi+" : " + "\n"
+            line.contacts.forEach(contact =>{
+                content += "        - " + contact+" : " + "\n";
+                count ++;
+            });
         });
+        content = 'Total number of person entered in contact with a POI these last 24 hours : ' + count.toString() + "\n";
+
         let filename = '/tmp/' + 'stats-' + id + '.txt';
         fs.writeFile(filename, content, function (err) {
             if (err) throw err;
             console.log('Saved!');
         });
         return filename;
-    }
-
-    deleteFileFs(filename) {
-        fs.unlink(filename, () => { });
     }
 
     /**
@@ -114,6 +120,7 @@ class StatsController {
     }
 
     sendMailWithLink(mailAdress, link) {
+        console.log(link);
         sendEmail(mailAdress, "Link to statistics", "Stats file available here: " + link + "\n Regards, \n Team A");
     }
 }

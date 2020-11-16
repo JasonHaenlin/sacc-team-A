@@ -32,15 +32,16 @@ exports.sendEmail = async ( to_email,subject,content) =>{
   // Construct the email request.
   const msg = {
     to: to_email,
-    from: 'alexislefebvre35@gmail.com',
+    from: 'younes.abdennadher@etu.univ-cotedazur.fr',
     subject: subject,
     html: content,
   };
 
   try {
     sendgrid.send(msg).then((res)=>{
-        console.log(res);
+       // console.log(res);
     }).catch((error)=>{
+      console.log(error.response.body);
         console.log(error);
     });
     // Send OK to Cloud Task queue to delete task.
