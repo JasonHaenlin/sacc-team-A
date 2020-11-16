@@ -13,7 +13,7 @@ const { logTheError } = require("../../middlewares/config/logger.js");
 class StatsController {
 
     constructor () {
-        stats.subscribeMessage((message) => this.getNumberOfUsers() /*this.getPoiForLastDay("alexis1953@live.fr")*/, (error) => logTheError(error)); // TODO change mail address
+        // stats.subscribeMessage((message) => this.getNumberOfUsers() /*this.getPoiForLastDay("alexis1953@live.fr")*/, (error) => logTheError(error)); // TODO change mail address
     }
 
     async getPoiForLastDay(mail) { // TODO add a parameter that specifies the number of hours we want

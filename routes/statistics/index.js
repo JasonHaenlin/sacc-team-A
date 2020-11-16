@@ -5,6 +5,7 @@ var statsController = require("../../appengine/controller/StatsController.js");
 const { stats } = require("../../middlewares/pub-sub");
 
 const datastore = require('../../database/datastore');
+const { ValidationError } = require("joi");
 
 router.get("/simple", handleExceptions(async (req, res) => {
 	let valueToReturn;
@@ -12,23 +13,23 @@ router.get("/simple", handleExceptions(async (req, res) => {
 		valueToReturn = await statsController.getNumberOfUsers();
 	} else if (req.query["numberofpoi"] !== undefined) {
 		valueToReturn = await statsController.getNumberOfPoi();
+	} else {
+		throw new ValidationError("Route must have 'numberofusers' or 'numberofpoi' as query");
 	}
-	// else {
-	// 	valueToReturn = statsController.getPoiForLastDay("alexis1953@live.fr"); // TODO remove this
-	// }
 	res.status(200).json(valueToReturn);
 }));
 
 router.get("/complex", handleExceptions(async (req, res) => {
-	if (req.query["numberofpoi24hours"]) {
+	// with pubsub
+	if (req.query["numberofpoi24hours"] !== undefined) {
 		stats.publishMessage(req.query["numberofpoi24hours"]);
 		//response = statsController.getPoiForLastDay("alexis1953@live.fr");
 	}
-	// else if (req.query["numberofpoi"]) {
-	// 	stats.publishMessage(req.query["numberofpoihours"]);
-	// 	//response = statsController.getPoiForLastDay("alexis1953@live.fr");
-	// }
-	// stats.publishMessage(req.body);
+
+	//withoutpubsub
+	else {
+		statsController.getPoiForLastDay("alexis1953@live.fr");
+	}
 	res.status(200).json("Request received.");
 }));
 
