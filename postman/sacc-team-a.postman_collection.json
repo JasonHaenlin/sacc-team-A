@@ -561,58 +561,6 @@
 					"response": []
 				},
 				{
-					"name": "CREATE tables",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/table/create",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"table",
-								"create"
-							],
-							"query": [
-								{
-									"key": "numberofpoi",
-									"value": null,
-									"disabled": true
-								}
-							]
-						},
-						"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
-					},
-					"response": []
-				},
-				{
-					"name": "CLEAR tables",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/table/clear",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"table",
-								"clear"
-							],
-							"query": [
-								{
-									"key": "numberofpoi",
-									"value": null,
-									"disabled": true
-								}
-							]
-						},
-						"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
-					},
-					"response": []
-				},
-				{
 					"name": "POST admins",
 					"event": [
 						{
@@ -688,7 +636,11 @@
 									"} else if(savedUsersSha1m % 2 == 1) {\r",
 									"    savedUsersSha1m.pop();\r",
 									"    pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
+									"    setTimeout(function(){}, 20000);\r",
+									"} else {\r",
+									"    setTimeout(function(){}, 20000);\r",
 									"}\r",
+									"    \r",
 									""
 								],
 								"type": "text/javascript"
@@ -751,7 +703,7 @@
 							"script": {
 								"id": "46e5e575-3a0a-45e0-bbb1-488b1436d3ca",
 								"exec": [
-									"if(pm.environment.get(\"usersSha1m\").length >= 2) {\r",
+									"if(pm.environment.get(\"usersSha1m\").length > 2) {\r",
 									"    postman.setNextRequest(\"POST meetings\");\r",
 									"} else {\r",
 									"    setTimeout(function(){}, 7500);\r",

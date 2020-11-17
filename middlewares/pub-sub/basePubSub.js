@@ -8,14 +8,17 @@ const pubSubClient = new PubSub({ PROJECT_ID });
 
 module.exports = class BasePubSub {
 
-    constructor (topicName, subscriptionName) {
+    constructor(topicName, subscriptionName) {
         this.projectId = PROJECT_ID;
         this.topicName = topicName;
         this.subscriptionName = subscriptionName;
     }
 
     async publishMessage(data) {
-        const dataBuffer = Buffer.from(JSON.stringify(data));
+        if (typeof data !== "string") {
+            data = JSON.stringify(data);
+        }
+        const dataBuffer = Buffer.from(data);
 
         const messageId = await pubSubClient.topic(this.topicName).publish(dataBuffer);
         logTheInfo(`Message ${messageId} published.`);
@@ -30,6 +33,13 @@ module.exports = class BasePubSub {
 
         // Receive callbacks for errors on the subscription
         subscription.on('error', onError);
+    }
+
+    replacer(key, value) {
+        if (typeof value === "string") {
+            return undefined;
+        }
+        return value;
     }
 
 }

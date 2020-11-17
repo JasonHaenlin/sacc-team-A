@@ -44,7 +44,7 @@ router.put('/:sha1', handleExceptions(ensureIsAdmin), handleExceptions(async (re
     const sha1 = req.params.sha1
     const user = await userSQL.getUserSha1(sha1);
     if (!user) {
-        throw new NotFoundError(`User not found with sha1 ${sha1}`);
+        throw new NotFoundError(`User not found with sha1 ${JSON.stringify(sha1)}`);
     }
     user.user_status_change_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
     updateUserPoi.createTask(user);
@@ -63,18 +63,18 @@ router.delete('/', handleExceptions(async (req, res) => {
  * Task to post a new user
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    logTheInfo(`Received task with payload: ${req.body}`);
+    logTheInfo(`Received task with payload: ${JSON.stringify(req.body)}`);
     await userSQL.createUser(req.body);
-    res.status(201).send(`Printed task payload: ${req.body}`);
+    res.status(201).send(`Printed task payload: ${JSON.stringify(req.body)}`);
 }));
 
 /**
  * Task to update a user poi
  */
 router.put('/task/poi', handleExceptions(async (req, res) => {
-    logTheInfo(`Received task with payload: ${req.body} with sha1 ${req.body.sha1}`);
+    logTheInfo(`Received task with payload: ${JSON.stringify(req.body)} with sha1 ${req.body.sha1}`);
     const model = await userSQL.putUser(req.body.sha1, req.body);
-    res.status(200).send(`Printed task payload: ${model}`);
+    res.status(200).send(`Printed task payload: ${JSON.stringify(model)}`);
 }));
 
 module.exports = router;

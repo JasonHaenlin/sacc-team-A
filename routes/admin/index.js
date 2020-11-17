@@ -14,7 +14,7 @@ router.post('/', handleExceptions(async (req, res) => {
     const admin = req.body;
     const { error } = validateAdmin(admin);
     if (error) {
-        throw new ValidationError(`Admin does not match schema ${admin}`, error);
+        throw new ValidationError(`Admin does not match schema ${JSON.stringify(admin)}`, error);
     }
     addAdmin.createTask(admin);
     res.status(200).json("Task Sent");
@@ -45,9 +45,9 @@ router.get('/detail/:email', handleExceptions(async (req, res) => {
  * Task to post a new admin
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    logTheInfo(`Received task with payload: ${req.body}`);
+    logTheInfo(`Received task with payload: ${JSON.stringify(req.body)}`);
     await adminSQL.createAdmin(req.body);
-    res.status(201).send(`Printed task payload: ${req.body}`);
+    res.status(201).send(`Printed task payload: ${JSON.stringify(req.body)}`);
 }));
 
 

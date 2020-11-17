@@ -24,7 +24,7 @@ router.post('/', handleExceptions(async (req, res) => {
     const meeting = req.body;
     const { error } = validateMeeting(meeting);
     if (error) {
-        throw new ValidationError(`Meeting does not match schema ${meeting}`, error);
+        throw new ValidationError(`Meeting does not match schema ${JSON.stringify(meeting)}`, error);
     }
     addMeeting.createTask(meeting);
     res.status(200).json("Task Sent");
@@ -34,10 +34,10 @@ router.post('/', handleExceptions(async (req, res) => {
  * Task to post a new meeting
  */
 router.post('/task', handleExceptions(async (req, res) => {
-    logTheInfo(`Received task with payload: ${req.body}`);
+    logTheInfo(`Received task with payload: ${JSON.stringify(req.body)}`);
     req.body.timestamp = new Date();
     const meeting = await datastore.save("meeting", req.body);
-    res.status(201).send(`Printed task payload: ${meeting}`).end();
+    res.status(201).send(`Printed task payload: ${JSON.stringify(meeting)}`).end();
 
 }));
 
