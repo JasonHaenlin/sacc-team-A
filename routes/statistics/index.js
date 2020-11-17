@@ -5,8 +5,11 @@ var statsController = require("../../appengine/controller/StatsController.js");
 const { stats, heatmapPubSub } = require("../../middlewares/pub-sub");
 
 const { ValidationError } = require("joi");
+const { ensureIsAdmin } = require("../../middlewares/authorization");
 
-router.get("/simple", handleExceptions(async (req, res) => {
+
+
+router.get("/simple", handleExceptions(ensureIsAdmin), handleExceptions(async (req, res) => {
 	let valueToReturn;
 	if (req.query["numberofusers"] !== undefined) {
 		valueToReturn = await statsController.getNumberOfUsers();
@@ -18,21 +21,20 @@ router.get("/simple", handleExceptions(async (req, res) => {
 	res.status(200).json(valueToReturn);
 }));
 
-router.get("/complex", handleExceptions(async (req, res) => {
-	// with pubsub
+router.get("/complex", handleExceptions(ensureIsAdmin), handleExceptions(async (req, res) => {
+	const email = req.headers.authorization;
 	if (req.query["numberofpoi24hours"] !== undefined) {
-		stats.publishMessage("numberofpoi24hours");
+		stats.publishMessage(email);
 	} else if (req.query["generateheatmap"] !== undefined) {
-		heatmapPubSub.publishMessage("generateheatmap");
+		heatmapPubSub.publishMessage(email);
 	}
-	//withoutpubsub
 	else {
-		statsController.getPoiForLastDay("alexis1953@live.fr");
+		throw new ValidationError("Route must have 'numberofpoi24hours' or 'generateheatmap' as query");
 	}
 	res.status(200).json("Request received.");
 }));
 
-router.get('/heatmap', handleExceptions(async (req, res) => {
+router.get('/heatmap', handleExceptions(ensureIsAdmin), handleExceptions(async (req, res) => {
 	res.status(200).json(statsController.getMeetingsForHeatmap());
 }));
 

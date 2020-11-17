@@ -12,18 +12,18 @@ const { logTheError } = require("../../middlewares/config/logger.js");
 
 class StatsController {
 
-    constructor() {
+    constructor () {
         this.meetingsForHeatmap = [];
 
         stats.subscribeMessage((message) => {
-            this.getPoiForLastDay(process.env.EMAIL_SENDER); // TODO change mail address
+            this.getPoiForLastDay(message); // TODO change mail address
             message.ack();
         }, (error) => {
             logTheError(error)
         });
 
         heatmapPubSub.subscribeMessage((message) => {
-            this.generateHeatmap(process.env.EMAIL_SENDER); // TODO change mail address
+            this.generateHeatmap(message); // TODO change mail address
             message.ack();
         }, (error) => {
             logTheError(error);

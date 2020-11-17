@@ -1,6 +1,51 @@
 # sacc-team-A
 
-Welcome to Sacc Team A Project
+Welcome to Sacc Team A Project.
+
+## Delivery information (in french)
+
+> /!\ La livraison est prévue pour mercredi. Nous vous remercions d'attendre un peu si le projet n'est toujours pas prêt :(
+
+Les requêtes Postman à exécuter se trouvent dans le dossier `./postman`. Il faut les importer dans Postman.
+
+### Précisions sur les statistiques
+
+Il existe des statistiques simples et des statistiques complexes.
+
+#### Statistiques simples
+
+Les statistiques simples sont faciles à calculer et le résultat est renvoyé directement dans le corps de la réponse HTTP.
+Il existe deux types statistiques simples :
+
+- Le nombre d'utilisateurs
+- Le nombre de personnes d'intérêt
+
+#### Statistiques complexes
+
+Les statistiques complexes prennent du temps à être calculées. La requête REST renvoie donc un "OK" à leur appel mais le résultat est différé et est généré dans un fichier.
+Il existe deux types de statistiques complexes :
+
+- La liste des personnes d'intérêt et leurs contacts sur les dernières 24 heures. Un fichier est généré à la fin du calcul et le lien est envoyé par email à l'administrateur.
+- La génération d'une heatmap montrant les personnes ayant été en contact avec une autre personne (donc les points de rencontre). Une fois la heatmap générée, le lien est envoyé par email à l'administrateur (https://sacc-team-a.ew.r.appspot.com/heatmap).
+
+> DANS LE CAS OU L'EMAIL N'EST PAS RECU :
+>
+> - Pour la liste des personnes d'intérêts et de leurs contacts, vous pouvez récupérer le lien du fichier (ainsi que de tous les fichiers créés) dans les journaux d'activité ou dans le Stockage (et voir le bucket) de AppEngine.
+> - Pour la heatmap, elle est visualissable ici après génération : https://sacc-team-a.ew.r.appspot.com/heatmap
+
+Comme ces calculs peuvent prendre du temps et qu'ils sont fait très peu souvents, nous pouvons nous permettre de faire attendre un peu plus l'utilisateur (en utilisant un PubSub qui permet au serveur de récupérer la requête dès qu'il le souhaite).
+
+vide bdd
+met admins
+mettre 200 users
+200 meetings
+20 PoI
+GET stats simples
+GET stats compliquées
+
+## Architecture
+
+![Architecture](/assets/architecture.png)
 
 ## Project
 
@@ -110,7 +155,3 @@ Create a topic
 
 Create a subscription
 `gcloud pubsub subscriptions create <YOUR_SUBSCRIPTION_NAME>`
-
-## Architecture
-
-![Architecture](/ressources/architecture.png)
