@@ -43,13 +43,20 @@ Il existe deux types de statistiques complexes :
 
 Comme ces calculs peuvent prendre du temps et qu'ils sont fait très peu souvents, nous pouvons nous permettre de faire attendre un peu plus l'utilisateur (en utilisant un PubSub qui permet au serveur de récupérer la requête dès qu'il le souhaite).
 
-vide bdd
-met admins
-mettre 200 users
-200 meetings
-20 PoI
-GET stats simples
-GET stats compliquées
+### Contenu de la vidéo
+
+Dans la vidéo, on lance un scénario sur postman. Voici le contenu de ce scénario :
+
+- Crée 2 administrateurs
+- Crée 200 utilisateurs
+- Crée 100 rencontres d'utilisateurs
+- Marque 50 utilisateurs en tant que PoI
+
+Ce scénario est lancé 13 fois en parallèle.
+
+Au cours de l'exécution de ce scénario, toutes les 3 secondes, une requête de statistiques complexes est exécutée afin que le serveur ai un grand nombre de données à traiter.
+
+Pendant ces requêtes, on voit sur la vidéo que le nombre d'instances augmente sur la console Google au fur et à mesure des requêtes.
 
 ## Architecture
 
