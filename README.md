@@ -43,7 +43,7 @@ Comme ces calculs peuvent prendre du temps et qu'ils sont fait très peu souvent
 
 ### Contenu de la vidéo
 
-VIDEO : https://youtu.be/8iP6grvwn2Q
+VIDEO : https://www.youtube.com/watch?v=d9tRBdOCEGw
 
 Dans la vidéo, on lance un scénario sur postman. Voici le contenu de ce scénario :
 
@@ -52,11 +52,14 @@ Dans la vidéo, on lance un scénario sur postman. Voici le contenu de ce scéna
 - Crée 100 rencontres d'utilisateurs
 - Marque 50 utilisateurs en tant que PoI
 
-Ce scénario est lancé 13 fois en parallèle.
+Ce scénario est lancé une quinzaine de fois en parallèle.
 
 Au cours de l'exécution de ce scénario, toutes les 3 secondes, une requête de statistiques complexes est exécutée afin que le serveur ai un grand nombre de données à traiter.
+Au total, plus de 500 calculs de statistiques complexes ont été effectués.
 
-Pendant ces requêtes, on voit sur la vidéo que le nombre d'instances augmente sur la console Google au fur et à mesure des requêtes.
+Pendant ces requêtes, on voit sur la vidéo que le nombre d'instances augmente sur la console Google au fur et à mesure des requêtes. La vidéo est accélérée par moments.
+
+A la fin de la vidéo, on voit les mails reçus après calcul des stats complexes (heatmap & liste des contacts de PoI), le fichier avec la liste des contacts des PoI, ainsi que la heatmap des rencontres.
 
 ## Architecture
 
