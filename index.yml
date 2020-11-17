@@ -1,0 +1,12 @@
+indexes:
+  - kind: meeting
+    properties:
+      - name: u2sha1
+      - name: timestamp
+      - name: u1sha1
+
+  - kind: meeting
+    properties:
+      - name: u1sha1
+      - name: timestamp
+      - name: u2sha1

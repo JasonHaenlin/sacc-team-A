@@ -40,7 +40,6 @@ exports.sendEmail = async (to_email, subject, content) => {
   try {
     sendgrid.send(msg).then((res) => {
     }).catch((error) => {
-      console.log(error.response.body);
       console.log(error);
     });
     // Send OK to Cloud Task queue to delete task.

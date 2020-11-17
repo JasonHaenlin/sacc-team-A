@@ -16,6 +16,10 @@ Pour recevoir les emails de résultat de statistiques, il faut créer un adminis
 
 Il existe des statistiques simples et des statistiques complexes.
 
+#### Authorisation
+
+Pour recevoir les emails, il faut créer un administrateur qui possède votre adresse mail. Il faut ensuite faire les requêtes de statistiques (`GET api/stats/complex ou api/stats/simple`) ou de marquage de personne (`PUT api/user/SHA1`) en n'oubliant pas de mettre votre adresse email dans le champ Authorisation pour avoir le droit de faire la requête en tant qu'administrateur.
+
 #### Statistiques simples
 
 Les statistiques simples sont faciles à calculer et le résultat est renvoyé directement dans le corps de la réponse HTTP.

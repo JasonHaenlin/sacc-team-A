@@ -57,13 +57,13 @@ function getWithFilters(kind, projections, filters) {
         //Projection
         if (projections != null) {
             if (projections.length > 0) {
-                query = query.select(projections);
+                query.select(projections);
             }
         }
         //Filters
-        filters.forEach(filter => {
-            query = query.filter(filter.left, filter.middle, filter.right);
-        });
+        for (const filter of filters) {
+            query.filter(filter.left, filter.middle, filter.right);
+        }
 
         // Query
         const [elements] = await datastore.runQuery(query);

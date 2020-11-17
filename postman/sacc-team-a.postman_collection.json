@@ -296,7 +296,13 @@
 							"name": "GET heatmap data",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "jh.notif+1@gmail.com",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{base_url}}/stats/heatmap",
 									"host": [
@@ -347,7 +353,13 @@
 							"name": "GET stats complex heatmap mail",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "jh.notif+1@gmail.com",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{base_url}}/stats/complex?generateheatmap",
 									"host": [
@@ -388,11 +400,6 @@
 										"complex"
 									],
 									"query": [
-										{
-											"key": "numberofpoi",
-											"value": null,
-											"disabled": true
-										},
 										{
 											"key": "numberofpoi24hours",
 											"value": null
@@ -529,9 +536,9 @@
 							"script": {
 								"id": "c36301e6-268a-48c4-b531-73517ade8d07",
 								"exec": [
-									"pm.environment.set(\"userCount\", 500);\r",
-									"pm.environment.set(\"poiCount\", 20);\r",
-									"pm.environment.set(\"adminCount\", 5);\r",
+									"pm.environment.set(\"userCount\", 50);\r",
+									"pm.environment.set(\"poiCount\", 5);\r",
+									"pm.environment.set(\"adminCount\", 2);\r",
 									"pm.environment.set(\"usersSha1\", []);\r",
 									"pm.environment.set(\"usersSha1m\", []);\r",
 									"pm.environment.set(\"adminEmail\", \"\");"
@@ -789,7 +796,7 @@
 									"let savedUsersSha1m = pm.environment.get(\"usersSha1m\");\r",
 									"\r",
 									"pm.environment.set(\"sha11\", savedUsersSha1m.pop());\r",
-									"pm.environment.set(\"sha12\", savedUsersSha1m[0]);\r",
+									"pm.environment.set(\"sha12\", savedUsersSha1m.pop());\r",
 									"\r",
 									"pm.environment.set(\"usersSha1m\", savedUsersSha1m);\r",
 									""
