@@ -15,7 +15,8 @@
     "datastore": "gcloud beta emulators datastore start",
     "sql": "./cloud_sql_proxy -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
     "wsql": "./cloud_sql_proxy.exe -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
-    "paraman": "node postman/paraman.js"
+    "paraman": "node postman/paraman.js",
+    "huet": "node postman/paraman.js"
   },
   "repository": {
     "type": "git",

@@ -20,6 +20,23 @@ function save(kind, data) {
     })
 }
 
+function upsert(key, data) {
+    return new Promise(async (resolve, reject) => {
+        // The Cloud Datastore key for the new entity
+        const kindKey = datastore.key(key);
+
+        // Prepares the new entity
+        const entity = {
+            key: kindKey,
+            data: data,
+        };
+
+        // Saves the entity
+        await datastore.save(entity);
+        resolve(entity)
+    })
+}
+
 function get(kind) {
     return new Promise(async (resolve, reject) => {
         const query = datastore.createQuery(kind);
@@ -78,4 +95,4 @@ function getWithFilters(kind, projections, filters) {
     })
 }
 
-module.exports = { save, get, getWithFilters, removeAll }
+module.exports = { save, get, getWithFilters, removeAll, upsert }

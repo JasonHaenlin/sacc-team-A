@@ -31,17 +31,16 @@ class StatsController {
     generateHeatmap(mail) {
         return new Promise(async (resolve) => {
             const meetings = await datastore.get('meeting');
-            await datastore.removeAll('heatmap')
-            await datastore.save('heatmap', meetings.map(meeting => {
-                return [meeting.latitude, meeting.longitude];
-            }));
-            this.sendMailWithLink(mail, "https://sacc-team-a.ew.r.appspot.com/heatmap");
+            await datastore.upsert('heatmap', {
+                meeting: meetings.map(m => ({ lat: m.latitude, lng: m.longitude, }))
+            });
+            // this.sendMailWithLink(mail, "https://sacc-team-a.ew.r.appspot.com/heatmap");
             resolve();
         });
     }
 
     async getMeetingsForHeatmap() {
-        return await datastore.get('heatmap')
+        return await datastore.get('heatmap');
     }
 
     async getPoiForLastDay(mail) {
