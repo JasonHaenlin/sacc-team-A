@@ -7,11 +7,11 @@ const path = require('path')
 const async = require('async')
 const newman = require('newman')
 
-const PARALLEL_RUN_COUNT = 2
+const PARALLEL_RUN_COUNT = 10
 
 const parametersForTestRun = {
     collection: path.join(__dirname, 'sacc-team-a.postman_collection.json'),
-    environment: path.join(__dirname, 'dev.postman_environment.json'),
+    environment: path.join(__dirname, 'prod.postman_environment.json'),
     iterationCount: 1,
     folder: 'scenario',
     reporters: 'cli'

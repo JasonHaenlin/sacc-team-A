@@ -80,7 +80,7 @@
 									"variable": [
 										{
 											"key": "sha1",
-											"value": "t6bnasdbxf",
+											"value": "cgekx1xd0f",
 											"description": "sha1 of an existing user in the system"
 										}
 									]
@@ -121,7 +121,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\":\"teamab@sacc.fr\"\r\n}",
+									"raw": "{\r\n    \"email\":\"teamac@sacc.fr\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -389,7 +389,13 @@
 							"name": "GET stats complex nb poi",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "jh.notif+1@gmail.com",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{base_url}}/stats/complex?numberofpoi24hours",
 									"host": [
@@ -536,8 +542,8 @@
 							"script": {
 								"id": "c36301e6-268a-48c4-b531-73517ade8d07",
 								"exec": [
-									"pm.environment.set(\"userCount\", 50);\r",
-									"pm.environment.set(\"poiCount\", 5);\r",
+									"pm.environment.set(\"userCount\", 200);\r",
+									"pm.environment.set(\"poiCount\", 50);\r",
 									"pm.environment.set(\"adminCount\", 2);\r",
 									"pm.environment.set(\"usersSha1\", []);\r",
 									"pm.environment.set(\"usersSha1m\", []);\r",
@@ -864,6 +870,79 @@
 							"});"
 						]
 					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Stats compute",
+			"item": [
+				{
+					"name": "GET stats complex heatmap mail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "jh.notif+1@gmail.com",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/stats/complex?generateheatmap",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stats",
+								"complex"
+							],
+							"query": [
+								{
+									"key": "numberofpoi",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "generateheatmap",
+									"value": null
+								}
+							]
+						},
+						"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+					},
+					"response": []
+				},
+				{
+					"name": "GET stats complex nb poi",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "jh.notif+1@gmail.com",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/stats/complex?numberofpoi24hours",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stats",
+								"complex"
+							],
+							"query": [
+								{
+									"key": "numberofpoi24hours",
+									"value": null
+								}
+							]
+						},
+						"description": "Retrieve stats\r\ncan filter the stats with query params\r\n- numberofusers\r\n- numberofpoi\r\n- none (all)"
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}

@@ -26,20 +26,13 @@ module.exports = class BasePubSub {
 
     async subscribeMessage(onMessage, onError) {
         // Creates a subscription on that new topic
-        const subscription = await pubSubClient.subscription(this.subscriptionName);
+        const subscription = pubSubClient.subscription(this.subscriptionName);
 
         // Receive callbacks for new messages on the subscription
         subscription.on('message', onMessage);
 
         // Receive callbacks for errors on the subscription
         subscription.on('error', onError);
-    }
-
-    replacer(key, value) {
-        if (typeof value === "string") {
-            return undefined;
-        }
-        return value;
     }
 
 }
