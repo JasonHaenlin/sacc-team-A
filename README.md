@@ -63,7 +63,7 @@ A la fin de la vidéo, on voit les mails reçus après calcul des stats complexe
 
 ## Architecture
 
-![Architecture](/assets/architecture.png)
+![Architecture](/assets/architecture.PNG)
 
 ## Project
 
