@@ -37,7 +37,7 @@ Il existe deux types de statistiques complexes :
 > Si l'email n'est pas reçu :
 >
 > - Pour la liste des personnes d'intérêts et de leurs contacts, vous pouvez récupérer le lien du fichier (ainsi que de tous les fichiers créés) dans les journaux d'activité ou dans le Stockage (et voir le bucket) de AppEngine.
-> - Pour la heatmap, elle est visualissable ici après génération : https://sacc-team-a.ew.r.appspot.com/heatmap
+> - Pour la heatmap, elle est visualisable ici après génération : https://sacc-team-a.ew.r.appspot.com/heatmap
 
 Comme ces calculs peuvent prendre du temps et qu'ils sont fait très peu souvents, nous pouvons nous permettre de faire attendre un peu plus l'utilisateur (en utilisant un PubSub qui permet au serveur de récupérer la requête dès qu'il le souhaite).
 
