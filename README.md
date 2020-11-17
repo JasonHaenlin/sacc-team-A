@@ -4,8 +4,6 @@ Welcome to Sacc Team A Project.
 
 ## Delivery information (in french)
 
-> /!\ La livraison est prévue pour mercredi. Nous vous remercions d'attendre un peu si le projet n'est toujours pas prêt :(
-
 Les requêtes Postman à exécuter se trouvent dans le dossier `./postman`. Il faut les importer dans Postman.
 
 Pour faire des requêtes administrateur comme les requêtes de statistiques (`GET api/stats/complex ou api/stats/simple`) ou de marquage de personne (`PUT api/user/SHA1`), il ne faut pas oublier de mettre l'adresse email d'un admin dans le champ Authorisation pour avoir le droit de faire la requête en tant qu'administrateur.
@@ -36,7 +34,7 @@ Il existe deux types de statistiques complexes :
 - La liste des personnes d'intérêt et leurs contacts sur les dernières 24 heures. Un fichier est généré à la fin du calcul et le lien est envoyé par email à l'administrateur.
 - La génération d'une heatmap montrant les personnes ayant été en contact avec une autre personne (donc les points de rencontre). Une fois la heatmap générée, le lien est envoyé par email à l'administrateur (https://sacc-team-a.ew.r.appspot.com/heatmap).
 
-> DANS LE CAS OU L'EMAIL N'EST PAS RECU :
+> Si l'email n'est pas reçu :
 >
 > - Pour la liste des personnes d'intérêts et de leurs contacts, vous pouvez récupérer le lien du fichier (ainsi que de tous les fichiers créés) dans les journaux d'activité ou dans le Stockage (et voir le bucket) de AppEngine.
 > - Pour la heatmap, elle est visualissable ici après génération : https://sacc-team-a.ew.r.appspot.com/heatmap
