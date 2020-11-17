@@ -35,7 +35,7 @@ router.get("/complex", handleExceptions(ensureIsAdmin), handleExceptions(async (
 }));
 
 router.get('/heatmap', handleExceptions(ensureIsAdmin), handleExceptions(async (req, res) => {
-	res.status(200).json(statsController.getMeetingsForHeatmap());
+	res.status(200).json(await statsController.getMeetingsForHeatmap());
 }));
 
 module.exports = router;

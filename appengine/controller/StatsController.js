@@ -12,7 +12,6 @@ const { logTheError } = require("../../middlewares/config/logger.js");
 class StatsController {
 
     constructor() {
-        this.meetingsForHeatmap = [];
 
         stats.subscribeMessage((message) => {
             this.getPoiForLastDay(message.data.toString());
@@ -32,16 +31,17 @@ class StatsController {
     generateHeatmap(mail) {
         return new Promise(async (resolve) => {
             const meetings = await datastore.get('meeting');
-            this.meetingsForHeatmap = meetings.map(meeting => {
+            await datastore.removeAll('heatmap')
+            await datastore.save('heatmap', meetings.map(meeting => {
                 return [meeting.latitude, meeting.longitude];
-            });
+            }));
             this.sendMailWithLink(mail, "https://sacc-team-a.ew.r.appspot.com/heatmap");
             resolve();
         });
     }
 
-    getMeetingsForHeatmap() {
-        return this.meetingsForHeatmap;
+    async getMeetingsForHeatmap() {
+        return await datastore.get('heatmap')
     }
 
     async getPoiForLastDay(mail) {
