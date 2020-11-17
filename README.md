@@ -45,6 +45,8 @@ Comme ces calculs peuvent prendre du temps et qu'ils sont fait très peu souvent
 
 ### Contenu de la vidéo
 
+VIDEO : https://youtu.be/8iP6grvwn2Q
+
 Dans la vidéo, on lance un scénario sur postman. Voici le contenu de ce scénario :
 
 - Crée 2 administrateurs
