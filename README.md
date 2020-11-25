@@ -4,6 +4,16 @@ Welcome to Sacc Team A Project.
 
 ## Delivery information (in french)
 
+### Startup
+
+Avant de commencer à lancer des requêtes, il faut activer
+
+- AppEngine : https://console.cloud.google.com/appengine/settings?serviceId=default&hl=fr&project=sacc-team-a (Bouton activer l'application)
+- SQL : https://console.cloud.google.com/sql/instances/sacc-team-a-sql/overview?hl=fr&project=sacc-team-a (appuyer sur DEMARRER en haut)
+  car ils sont actuellement éteints pour ne pas consommer dans le compte de facturation.
+
+### Requêtes
+
 Les requêtes Postman à exécuter se trouvent dans le dossier `./postman`. Il faut les importer dans Postman.
 
 Pour faire des requêtes administrateur comme les requêtes de statistiques (`GET api/stats/complex ou api/stats/simple`) ou de marquage de personne (`PUT api/user/SHA1`), il ne faut pas oublier de mettre l'adresse email d'un admin dans le champ Authorisation pour avoir le droit de faire la requête en tant qu'administrateur.
