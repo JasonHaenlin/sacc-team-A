@@ -6,6 +6,19 @@ Welcome to Sacc Team A Project.
 
 ### Startup
 
+#### Configuration de cloud SQL
+
+Créer une instance Cloud SQL avec ces informations :
+
+- type : `postgreSQL`
+- instance : `sacc-team-a-sql`
+- server : `europe-west1`
+- database : `sacc-team-a-database`
+- user : `postgres`
+- password : `saccteama`
+
+Plus d'informations : https://cloud.google.com/sql/docs/postgres/create-instance
+
 Avant de commencer à lancer des requêtes, il faut activer
 
 - AppEngine : https://console.cloud.google.com/appengine/settings?serviceId=default&hl=fr&project=sacc-team-a (Bouton activer l'application)
