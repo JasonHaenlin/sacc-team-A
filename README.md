@@ -8,10 +8,23 @@ Welcome to Sacc Team A Project.
 
 #### Configuration de cloud SQL
 
-Créer une instance Cloud SQL avec ces informations :
+Créer une instance Cloud SQL avec ces commandes :
+
+```s
+gcloud sql instances create sacc-team-a-db --database-version=POSTGRES_12 --cpu=2 --memory=7680MB --region=europe-west1
+gcloud sql users set-password postgres --instance=sacc-team-a-db --password=saccteama
+gcloud sql databases create sacc-team-a-database --instance=sacc-team-a-db
+```
+
+##### Créer les tables
+
+Faire la requête **CREATE tables** depuis le script postman pour créer les tables avant de commencer le scénario ou à faire des requêtes.
+ou sinon directement un POST `https://sacc-team-a.ew.r.appspot.com/api/table/create`
+
+##### Informations (si depuis console cloud)
 
 - type : `postgreSQL`
-- instance : `sacc-team-a-sql`
+- instance : `sacc-team-a-db`
 - server : `europe-west1`
 - database : `sacc-team-a-database`
 - user : `postgres`

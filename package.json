@@ -13,8 +13,8 @@
     "dev-win": "SET NODE_ENV=development & nodemon app.js",
     "deploy": "gcloud app deploy",
     "datastore": "gcloud beta emulators datastore start",
-    "sql": "./cloud_sql_proxy -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
-    "wsql": "./cloud_sql_proxy.exe -instances=sacc-team-a:europe-west1:sacc-team-a-sql=tcp:5432",
+    "sql": "./cloud_sql_proxy -instances=sacc-team-a:europe-west1:sacc-team-a-db=tcp:5432",
+    "wsql": "./cloud_sql_proxy.exe -instances=sacc-team-a:europe-west1:sacc-team-a-db=tcp:5432",
     "paraman": "node postman/paraman.js",
     "huet": "node postman/paraman.js"
   },
