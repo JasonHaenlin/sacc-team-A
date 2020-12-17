@@ -6,11 +6,17 @@ Welcome to Sacc Team A Project.
 
 ### Startup
 
+```s
+# si le projet n'est pas encore configuré
+gcloud config set project sacc-team-a
+```
+
 #### Configuration de cloud SQL
 
 Créer une instance Cloud SQL avec ces commandes :
 
 ```s
+# pour instancier la base de donnée
 gcloud sql instances create sacc-team-a-db --database-version=POSTGRES_12 --cpu=2 --memory=7680MB --region=europe-west1
 gcloud sql users set-password postgres --instance=sacc-team-a-db --password=saccteama
 gcloud sql databases create sacc-team-a-database --instance=sacc-team-a-db
@@ -21,22 +27,9 @@ gcloud sql databases create sacc-team-a-database --instance=sacc-team-a-db
 Faire la requête **CREATE tables** depuis le script postman pour créer les tables avant de commencer le scénario ou à faire des requêtes.
 ou sinon directement un POST `https://sacc-team-a.ew.r.appspot.com/api/table/create`
 
-##### Informations (si depuis console cloud)
-
-- type : `postgreSQL`
-- instance : `sacc-team-a-db`
-- server : `europe-west1`
-- database : `sacc-team-a-database`
-- user : `postgres`
-- password : `saccteama`
-
-Plus d'informations : https://cloud.google.com/sql/docs/postgres/create-instance
-
-Avant de commencer à lancer des requêtes, il faut activer
+##### Activer AppEngine
 
 - AppEngine : https://console.cloud.google.com/appengine/settings?serviceId=default&hl=fr&project=sacc-team-a (Bouton activer l'application)
-- SQL : https://console.cloud.google.com/sql/instances/sacc-team-a-sql/overview?hl=fr&project=sacc-team-a (appuyer sur DEMARRER en haut)
-  car ils sont actuellement éteints pour ne pas consommer dans le compte de facturation.
 
 ### Requêtes
 
@@ -77,6 +70,16 @@ Il existe deux types de statistiques complexes :
 
 Comme ces calculs peuvent prendre du temps et qu'ils sont fait très peu souvents, nous pouvons nous permettre de faire attendre un peu plus l'utilisateur (en utilisant un PubSub qui permet au serveur de récupérer la requête dès qu'il le souhaite).
 
+#### Explication des requêtes de statistiques dans le dossier stats
+- Stats simples :
+    - **GET stats** : permet de récupérer le nombre de users ou le nombre de PoI. Pour avoir le nombre de PoI, il faut remplacer `numberofusers` par `numberofpoi`
+- Stats complexes :
+    - **GET stats complex heatmap mail** : permet de générer la heatmap et envoyer un mail avec le lien de la heatmap au user ayant fait la requête. **Il faut appeler cette route AVANT d'appeler GET heatmap data ou GET heatmap view afin de générer une heatmap et ne pas avoir d'erreur par la suite**
+    - **GET stats complex nb poi** : permet de génerer la liste des personnées d'intêret et leurs contacts sur les dernièeres 24 heures. Le lien vers cette liste est envoyée par mail.
+- Divers :
+    - **GET heatmap data** : permet de récupérer les données de la heatmap, elle renvoie une liste de coordonnées de points de rencontre (cette route est utilisée par la route permettant d'afficher la heatmap).
+    - **GET heatmap view** : retourne la page html qui permet de voir la heatmap
+
 ### Contenu de la vidéo
 
 VIDEO : https://www.youtube.com/watch?v=d9tRBdOCEGw
@@ -100,6 +103,8 @@ A la fin de la vidéo, on voit les mails reçus après calcul des stats complexe
 ## Architecture
 
 ![Architecture](/assets/architecture.PNG)
+
+
 
 ## Project
 
